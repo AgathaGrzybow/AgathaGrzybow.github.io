@@ -19,57 +19,82 @@
     <input type="password" id="password" placeholder="Enter Password" />
     <button id="submit">Submit</button>
     <div id="lock-animation"></div> <!-- Placeholder for the animation -->
+<script>
+const correctPasswordHash = "6dcb0e84f3d7d9f076db16f99e90abafeeb4a83ab1079b021b346977368c4d6a"; // Predefined hash
+const message = document.querySelector('.message');
+const lockAnimationDiv = document.getElementById('lock-animation');
 
-    <script>
-        const correctPasswordHash = "6dcb0e84f3d7d9f076db16f99e90abafeeb4a83ab1079b021b346977368c4d6a"; // Predefined hash
-        const message = document.querySelector('.message');
-        const lockAnimationDiv = document.getElementById('lock-animation');
+setInterval(() => {
+    message.style.opacity = message.style.opacity === '0' ? '1' : '0';
+}, 3000);
 
-        setInterval(() => {
-            message.style.opacity = message.style.opacity === '0' ? '1' : '0';
-        }, 3000);
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    const hashedString = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    console.log('Hashed Password:', hashedString); // Log the hashed password
+    return hashedString;
+}
 
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+function playLockAnimation() {
+    const animationFrames = [
+        `    .------.
+   /  ~ ~   \\
+  |  ~ ~ ~  |
+   \\________/
+     |    |
+     |    |`,
+        `    .------.
+   /  ~ ~   \\
+  |  ~ ~ ~  |
+   \\________/
+     |    |
+     |    |
+     |    |   
+     |    |   
+       ( )  `,
+        `    .------.
+   /  ~ ~   \\
+  |  ~ ~ ~  |
+   \\________/
+     |    |
+     |    |
+     |    |   
+     |    |   
+      [ ]   `
+    ];
+
+    let currentFrame = 0;
+    lockAnimationDiv.style.display = 'block'; // Show the ASCII art container
+
+    const interval = setInterval(() => {
+        lockAnimationDiv.textContent = animationFrames[currentFrame];
+        currentFrame++;
+        if (currentFrame === animationFrames.length) {
+            clearInterval(interval);
+            setTimeout(() => {
+                window.location.href = 'secret.html'; // Redirect to secret page after animation
+            }, 1000);
         }
+    }, 500); // Change frame every 500ms
+}
 
-        function playLockAnimation() {
-            const animationFrames = [
-                `    .------.\n   /  ~ ~   \\\n  |  ~ ~ ~  |\n   \\________/\n     |    |\n     |    |
-     \n     |    |\n     |    |`,
-                `    .------.\n   /  ~ ~   \\\n  |  ~ ~ ~  |\n   \\________/\n     |    |\n     |    |\n     |    |   \n     |    |   \n       ( )  `,
-                `    .------.\n   /  ~ ~   \\\n  |  ~ ~ ~  |\n   \\________/\n     |    |\n     |    |\n     |    |   \n     |    |   \n      [ ]   `
-            ];
+document.getElementById('submit').onclick = async function () {
+    const passwordField = document.getElementById('password');
+    const password = passwordField.value.trim(); // Trim whitespace
+    const hashedInput = await hashPassword(password);
 
-            let currentFrame = 0;
-            lockAnimationDiv.style.display = 'block'; // Show the ASCII art container
+    console.log('Input Password:', password); // Log input password
+    console.log('Input Hashed:', hashedInput); // Log the hashed input for comparison
 
-            const interval = setInterval(() => {
-                lockAnimationDiv.textContent = animationFrames[currentFrame];
-                currentFrame++;
-                if (currentFrame === animationFrames.length) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        window.location.href = 'secret.html'; // Redirect to secret page after animation
-                    }, 1000);
-                }
-            }, 500); // Change frame every 500ms
-        }
-
-        document.getElementById('submit').onclick = async function () {
-            const passwordField = document.getElementById('password');
-            const password = passwordField.value;
-            const hashedInput = await hashPassword(password);
-
-            if (hashedInput === correctPasswordHash) {
-                playLockAnimation(); // Play animation if password is correct
-            } else {
-                alert('Incorrect password!');
-            }
-        };
-    </script>
+    if (hashedInput === correctPasswordHash) {
+        playLockAnimation(); // Play animation if password is correct
+    } else {
+        alert('Incorrect password!');
+    }
+};
+</script>
 </body>
 </html>
