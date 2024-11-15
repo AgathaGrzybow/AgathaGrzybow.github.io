@@ -16,14 +16,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative; /* Added for matrix effect positioning */
+            position: relative;
         }
         h1 {
             font-size: 48px;
             opacity: 1;
             animation: flicker 2s infinite;
-            position: relative; /* Prevent overlay with matrix */
-            z-index: 1; /* Ensure it stays above the matrix */
+            position: relative;
+            z-index: 1;
         }
         @keyframes flicker {
             0%, 100% { opacity: 1; }
@@ -32,7 +32,7 @@
         .sub-text {
             font-size: 20px;
             margin-bottom: 20px;
-            position: relative; /* Prevent overlay with matrix */
+            position: relative;
             z-index: 1;
         }
         .small {
@@ -45,7 +45,7 @@
             color: white;
             padding: 10px;
             width: 250px;
-            position: relative; /* Prevent overlay with matrix */
+            position: relative;
             z-index: 1;
         }
         #checkmark {
@@ -56,7 +56,7 @@
             margin-top: 24px;
             margin-left: 4px;
             display: inline-block;
-            position: relative; /* Prevent overlay with matrix */
+            position: relative;
             z-index: 1;
         }
         #custom-alert {
@@ -66,7 +66,7 @@
             transform: translateX(-50%);
             background-color: rgba(0, 128, 0, 0.9);
             transition: top 0.5s;
-            z-index: 1; /* Ensure it stays above the matrix */
+            z-index: 1;
         }
         #ok-button {
             background-color: black;
@@ -95,7 +95,7 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            z-index: 0; /* Layer behind everything else */
+            z-index: 0;
         }
         .matrix-character {
             color: lime;
@@ -104,13 +104,13 @@
             white-space: nowrap;
             position: absolute;
             bottom: 100%;
-            animation: fall linear infinite, fade 1s forwards; /* Add fade effect */
+            animation: fall linear forwards; /* Changed to forwards */
         }
         @keyframes fall {
-            to { transform: translateY(100vh); }
-        }
-        @keyframes fade {
-            to { opacity: 0; } /* Fades out during fall */
+            to { 
+                transform: translateY(100vh); 
+                opacity: 0; /* Add fade out directly in fall */
+            }
         }
     </style>
 </head>
@@ -133,24 +133,28 @@
         const okButton = document.getElementById('ok-button');
         const matrixContainer = document.getElementById('matrix');
         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const characterCount = 50; // Reduced number of characters to generate
-        function createMatrixRain() {
-            for (let i = 0; i < characterCount; i++) {
-                const charElem = document.createElement('div');
-                charElem.className = 'matrix-character';
-                charElem.innerText = characters[Math.floor(Math.random() * characters.length)];
-                charElem.style.left = Math.random() * 100 + 'vw'; // Randomly position horizontal start
-                charElem.style.animationDuration = Math.random() * 3 + 3 + 's'; // Random fall time
-                matrixContainer.appendChild(charElem);
-                
-                // Remove character from DOM after falling
-                charElem.addEventListener('animationend', function() {
-                    charElem.remove();
-                });
-            }
+        const maxCharactersOnScreen = 20; // Max simultaneous characters
+        function createMatrixCharacter() {
+            const charElem = document.createElement('div');
+            charElem.className = 'matrix-character';
+            charElem.innerText = characters[Math.floor(Math.random() * characters.length)];
+            charElem.style.left = Math.random() * 100 + 'vw'; // Randomly position horizontal start
+            // Random duration between 4 to 6 seconds for fall
+            charElem.style.animationDuration = Math.random() * 2 + 4 + 's'; 
+            matrixContainer.appendChild(charElem);
+            
+            // Remove character from DOM after falling
+            charElem.addEventListener('animationend', function() {
+                charElem.remove();
+            });
         }
         function startMatrixRain() {
-            setInterval(createMatrixRain, 150); // Generate new characters every 150ms
+            setInterval(() => {
+                const currentCharacters = document.querySelectorAll('.matrix-character').length;
+                if (currentCharacters < maxCharactersOnScreen) {
+                    createMatrixCharacter(); // Create a new character if under the max limit
+                }
+            }, 200); // Generate new characters every 200ms
         }
         async function hashPassword(password) {
             const encoder = new TextEncoder();
