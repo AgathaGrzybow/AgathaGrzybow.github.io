@@ -7,115 +7,159 @@
     <style>
         body {
             background-color: black;
-            color: lime; /* Bright green color */
-            font-family: monospace;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
             overflow: hidden;
-            text-align: center; /* Center contents */
         }
-        #lock-animation {
-            white-space: pre; /* Preserve whitespace in ASCII art */
-            display: none; /* Hide by default */
-            font-size: 24px; /* Increase font size */
-            animation: glitch 1s infinite alternate; /* Glitch effect */
-            margin-top: 20%; /* Centering on the page */
+        h1 {
+            font-size: 48px;
+            opacity: 1;
+            animation: flicker 2s infinite;
         }
-        @keyframes glitch {
-            0% { opacity: 1; }
-            20% { opacity: 0.8; }
-            40% { opacity: 0.2; }
-            60% { opacity: 0.6; }
-            80% { opacity: 0.4; }
-            100% { opacity: 1; }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
-        /* Hide inputs and message when password is correct */
-        .hidden {
+        .sub-text {
+            font-size: 20px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .small {
+            font-size: 14px;
+        }
+        input[type="text"] {
+            background-color: black;
+            border: 2px solid lime;
+            border-radius: 20px;
+            color: white;
+            padding: 10px;
+            width: 250px;
+            outline: none;
+        }
+        #checkmark {
+            cursor: pointer;
+            font-size: 24px;
+            color: lime;
+            margin-left: 10px;
+        }
+        #custom-alert {
+            position: fixed;
+            top: -100px; /* Offscreen */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 128, 0, 0.9);
+            color: white;
+            font-size: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            transition: top 0.5s ease;
             display: none;
+        }
+        #ok-button {
+            background-color: black;
+            color: lime;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="message">Enter Password:</div>
-    <input type="text" id="password" />
-    <button id="submit">Submit</button>
-    <div id="lock-animation"></div>
-
+    <h1>KEEP SMILING.</h1>
+    <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
+    <div>
+        <input type="text" id="password" placeholder="Enter password">
+        <span id="checkmark">✅</span>
+    </div>
+    <div id="custom-alert">
+        TRY AGAIN.
+        <button id="ok-button">OK</button>
+    </div>
+    <div id="lock-animation" style="display:none;"></div>
+    
     <script>
-        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be"; // Updated hashed password
-        const message = document.querySelector('.message');
-        const lockAnimationDiv = document.getElementById('lock-animation');
+        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
+        const lockArtFrames = [
+            `   .------.
+    /  ~ ~   \\
+   |  ~ ~ ~  |
+    \\________/
+        |   |
+        |   |`,
+            `   .------.
+    /  ~ ~   \\
+   |  ~ ~ ~  |
+    \\________/
+        |   |
+        |   |
+        |   |  ( )
+    [=======]`,
+            `   .------.
+    /  ~ ~   \\
+   |  ~ ~ ~  |
+    \\________/
+        |   |
+        |   |
+        |   |
+    [=======]`
+        ];
 
-        setInterval(() => {
-            message.style.opacity = message.style.opacity === '0' ? '1' : '0';
-        }, 3000);
+        const passwordField = document.getElementById('password');
+        const checkmark = document.getElementById('checkmark');
+        const customAlert = document.getElementById('custom-alert');
+        const okButton = document.getElementById('ok-button');
+        const lockAnimation = document.getElementById('lock-animation');
 
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            const hashedString = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-            console.log('Hashed Password:', hashedString);
-            return hashedString;
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function showCustomAlert() {
+            customAlert.style.display = 'block';
+            customAlert.style.top = '20px'; // Slide down into view
+            setTimeout(() => {
+                customAlert.style.top = '-100px'; // Slide out of view
+            }, 3000);
         }
 
         function playLockAnimation() {
-            const animationFrames = [
-                `   .------.
-  /  ~ ~   \\
- |  ~ ~ ~  |
-  \\________/
-      |   |
-      |   |`,
-                `   .------.
-  /  ~ ~   \\
- |  ~ ~ ~  |
-  \\________/
-      |   |
-      |   |
-      |   |  ( )
-    [=======]`,
-                `   .------.
-  /  ~ ~   \\
- |  ~ ~ ~  |
-  \\________/
-      |   |
-      |   |
-      |   |
-    [=======]`
-            ];
-
             let currentFrame = 0;
-            lockAnimationDiv.style.display = 'block'; // Show the ASCII art container
+            lockAnimation.style.display = 'block'; // Show the ASCII art container
 
             const interval = setInterval(() => {
-                lockAnimationDiv.textContent = animationFrames[currentFrame];
+                lockAnimation.textContent = lockArtFrames[currentFrame];
                 currentFrame++;
-                if (currentFrame === animationFrames.length) {
+
+                if (currentFrame === lockArtFrames.length) {
                     clearInterval(interval);
                     setTimeout(() => {
-                        window.location.href = 'secret.html'; // Redirect to secret page after animation
+                        window.location.href = 'main.html'; // Redirect after animation
                     }, 1000);
                 }
             }, 500); // Change frame every 500ms
         }
 
-        document.getElementById('submit').onclick = async function () {
-            const passwordField = document.getElementById('password');
-            const password = passwordField.value.trim(); // Trim whitespace
+        checkmark.onclick = async function() {
+            const password = passwordField.value.trim();
             const hashedInput = await hashPassword(password);
-
-            console.log('Input Password:', password); // Log input password
-            console.log('Input Hashed:', hashedInput); // Log the hashed input for comparison
-
+    
             if (hashedInput === correctPasswordHash) {
-                // Hide all but ASCII art
-                document.body.querySelectorAll('.message, #password, #submit').forEach(el => {
-                    el.classList.add('hidden');
-                });
-                lockAnimationDiv.style.display = 'block'; // Show the ASCII art
-                playLockAnimation(); // Play animation if password is correct
+                document.body.querySelectorAll('h1, .sub-text, #password, #checkmark').forEach(el => el.style.display = 'none'); // Hide UI
+                playLockAnimation();
             } else {
-                alert('Incorrect password!');
+                showCustomAlert(); // Show custom alert for incorrect password
             }
+        };
+
+        okButton.onclick = function() {
+            customAlert.style.display = 'none'; // Hide the alert when OK is pressed
         };
     </script>
 </body>
