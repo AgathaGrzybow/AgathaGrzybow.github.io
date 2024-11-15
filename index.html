@@ -11,21 +11,29 @@
             font-family: 'Courier New', Courier, monospace;
             text-align: center;
             overflow: hidden;
-            height: 100vh;
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0;
         }
         .container {
-            height: 100vh;
+            height: 300vh; /* Create extra space for scrolling */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
+        }
+        .gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%; /* Fill the entire height */
             background: linear-gradient(to bottom, black, lime);
-            overflow-y: auto; /* Enable scrolling */
+            opacity: 0; /* Start transparent */
+            transition: opacity 0.5s; /* Smooth transition */
+        }
+        .show-gradient {
+            opacity: 1; /* Show gradient when the class is added */
         }
         h1 {
             font-size: 48px;
@@ -55,13 +63,14 @@
         }
         #checkmark {
             cursor: pointer;
-            width: 30px; /* Adjust as needed */
-            height: auto; /* Maintain aspect ratio */
+            width: 30px; 
+            height: auto; 
             z-index: 1;
+            margin-top: 5px; /* Positioned 5 pixels down */
         }
         #custom-alert {
             position: fixed;
-            top: -100px; /* Offscreen */
+            top: -100px; 
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 128, 0, 0.9);
@@ -89,13 +98,13 @@
         }
         .ascii-art {
             display: none;
-            color: black; /* ASCII art color */
+            color: black; 
             font-family: monospace;
             white-space: pre;
             margin: 20px;
             z-index: 1;
-            opacity: 0; /* Initially hidden */
-            animation: glitch 1s infinite; /* Apply glitch animation */
+            opacity: 0; 
+            animation: glitch 1s infinite; 
         }
         @keyframes glitch {
             0% {
@@ -127,30 +136,26 @@
 </head>
 <body>
     <div class="container">
+        <div class="gradient" id="gradient"></div><!-- Gradient div -->
         <h1>KEEP SMILING.</h1>
         <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
         <div>
-            <input type="text" id="password" placeholder="Input a name."> <!-- Changed placeholder text -->
-            <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark"> <!-- Image for checkmark -->
+            <input type="text" id="password" placeholder="Input a name."> 
+            <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark">
         </div>
         <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
         <div id="loading-animation"></div>
         <div class="ascii-art" id="ascii-art">
-            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣠⣤⣤⣤⣤⣤⣤⣤⣄⣀⡀\n
-            ⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠊⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠳⣄⡀\n
-            ⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧\n
-            ⠀⠀⠀⠀⠀⡜⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧\n
-            ⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣇\n
-            ⠀⠀⠀⠀⠀⣹⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇\n
-            ⠀⠀⠀⠀⣰⡟⠁⠀⣀⣤⣤⣤⣴⣦⣤⣤⣤⣤⣶⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇\n
-            ⠀⠀⢸⠀⣿⢃⣴⣿⣿⡿⠋⠉⠉⣉⣉⣉⡉⠉⢻⣿⣿⣿⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠁\n
-            ⠀⠀⠈⡆⢹⣾⡟⠁⠀⠀⠀⠀⣾⡏⠛⠿⠿⢷⡜⠻⣿⣿⣷⡀⠀⠀⠀⠀⠀⢀⣠⡞⠀⠀\n
-            ⠀⠀⠀⡇⠈⡟⠄⠀⠀⠀⢀⣾⡏⠀⠀⠀⠀⠀⣣⡄⠸⣟⣻⣿⣷⠀⠀⠀⠠⠊⠁⠀⠀⠀\n
-            ⠀⠀⠀⠁⠀⡇⠀⠀⠀⠀⣿⣿⣿⣷⣤⣤⣤⣴⣿⣷⣶⠼⠿⡿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⠀⣇⠀⠀⠀⠀⠛⠿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⠀⠘⣆⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⠻⢷⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⠀⠀⠈⠳⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠳⠤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠲⢤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣬⣭⣍⣉⣂⣀⡀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⣶⣶⣶⣶⣶⣶⣶⣶⣶⣦⣀⡀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠚⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠢⣄⡈⠡⢀⡴⠊⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣧⠀⠈⣷⡀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⡰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠈⣷⡀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠙⡆⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⣀⣴⢿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⣧⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⢸⣇⠀⡀⠀⠀⠀⠉⠻⣿⣟⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⡏⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⢿⣀⣸⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣇⠀⣀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⠞⠁⠀⠀⣼⠀⠀⡞⠁⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠈⠈⠉⠉⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠋⠁⠈⠉⠉⠉⣀⡴⠖⠉⠁⠀⠀⠀⠀⠀⠀⣠⡞⠁⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
         </div>
     </div>
     <script>
@@ -161,6 +166,7 @@
         const customAlert = document.getElementById('custom-alert');
         const okButton = document.getElementById('ok-button');
         const asciiArt = document.getElementById('ascii-art');
+        const gradient = document.getElementById('gradient');
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
@@ -199,6 +205,14 @@
                 }
             }, 500); // Update every 500ms
         }
+        window.addEventListener('scroll', () => {
+            const scrolledDistance = window.scrollY;
+            if (scrolledDistance > window.innerHeight * 0.5) { // Adjust threshold as needed
+                gradient.classList.add('show-gradient'); // Show gradient when scrolling down
+            } else {
+                gradient.classList.remove('show-gradient'); // Hide gradient when back at top
+            }
+        });
         checkmark.onclick = async function() {
             const password = passwordField.value.trim();
             const hashedInput = await hashPassword(password);
