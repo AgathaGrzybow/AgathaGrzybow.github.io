@@ -1,2 +1,1 @@
-
-
+FUCK NIGGERS
