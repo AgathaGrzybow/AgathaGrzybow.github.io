@@ -16,11 +16,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
+            position: relative; /* Added for matrix effect positioning */
+            }
         h1 {
             font-size: 48px;
             opacity: 1;
             animation: flicker 2s infinite;
+            position: relative; /* Prevent overlay with matrix */
+            z-index: 1; /* Ensure it stays above the matrix */
         }
         @keyframes flicker {
             0%, 100% { opacity: 1; }
@@ -28,7 +31,9 @@
         }
         .sub-text {
             font-size: 20px;
-            margin-bottom: 20px; /* Space between text and password field */
+            margin-bottom: 20px;
+            position: relative; /* Prevent overlay with matrix */
+            z-index: 1;
         }
         .small {
             font-size: 14px;
@@ -40,23 +45,28 @@
             color: white;
             padding: 10px;
             width: 250px;
+            position: relative; /* Prevent overlay with matrix */
+            z-index: 1;
         }
         #checkmark {
             cursor: pointer;
             font-size: 24px;
-            width: 30px; /* Checkmark width */
-            height: auto; /* Maintain aspect ratio */
-            margin-top: 24px; /* 24 pixels down */
-            margin-left: 4px; /* 4 pixels right */
-            display: inline-block; /* Ensure proper positioning with margins */
+            width: 30px;
+            height: auto;
+            margin-top: 24px;
+            margin-left: 4px;
+            display: inline-block;
+            position: relative; /* Prevent overlay with matrix */
+            z-index: 1;
         }
         #custom-alert {
             position: fixed;
-            top: -100px; /* Offscreen */
+            top: -100px;
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 128, 0, 0.9);
             transition: top 0.5s;
+            z-index: 1; /* Ensure it stays above the matrix */
         }
         #ok-button {
             background-color: black;
@@ -77,14 +87,37 @@
             from { opacity: 1; }
             to { opacity: 0; }
         }
+        /* Matrix Rain */
+        #matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 0; /* Layer behind everything else */
+        }
+        .matrix-character {
+            color: lime;
+            font-size: 20px;
+            font-family: monospace;
+            white-space: nowrap;
+            position: absolute;
+            bottom: 100%;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
     </style>
 </head>
 <body>
+    <div id="matrix"></div> <!-- Matrix rain container -->
     <h1>KEEP SMILING.</h1>
     <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
     <div>
         <input type="text" id="password" placeholder="Enter password">
-        <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark"> <!-- Checkmark image -->
+        <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark">
     </div>
     <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
     <div id="loading-animation">[ ] Loading...</div>
@@ -95,6 +128,27 @@
         const checkmark = document.getElementById('checkmark');
         const customAlert = document.getElementById('custom-alert');
         const okButton = document.getElementById('ok-button');
+        const matrixContainer = document.getElementById('matrix');
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const characterCount = 150; // Number of characters to generate
+        function createMatrixRain() {
+            for (let i = 0; i < characterCount; i++) {
+                const charElem = document.createElement('div');
+                charElem.className = 'matrix-character';
+                charElem.innerText = characters[Math.floor(Math.random() * characters.length)];
+                charElem.style.left = Math.random() * 100 + 'vw'; // Randomly position horizontal start
+                charElem.style.animationDuration = Math.random() * 3 + 3 + 's'; // Random fall time
+                matrixContainer.appendChild(charElem);
+                
+                // Remove character from DOM after falling
+                charElem.addEventListener('animationend', function() {
+                    charElem.remove();
+                });
+            }
+        }
+        function startMatrixRain() {
+            setInterval(createMatrixRain, 100); // Generate new characters every 100ms
+        }
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
@@ -141,6 +195,8 @@
         okButton.onclick = function() {
             customAlert.style.display = 'none'; // Hide the alert when OK is pressed
         };
+        // Start the matrix rain effect when the page loads
+        startMatrixRain();
     </script>
 </body>
 </html>
