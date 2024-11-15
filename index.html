@@ -15,7 +15,7 @@
             padding: 0;
         }
         .container {
-            height: 300vh; /* Create extra space for scrolling */
+            height: 300vh; /* Allow for scrolling */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -23,23 +23,24 @@
             position: relative;
         }
         .gradient {
-            position: absolute;
+            position: fixed; /* Keep it fixed during scroll */
             top: 0;
             left: 0;
             right: 0;
-            height: 100%; /* Fill the entire height */
+            height: 100vh; /* Occupy full viewport height */
             background: linear-gradient(to bottom, black, lime);
-            opacity: 0; /* Start transparent */
-            transition: opacity 0.5s; /* Smooth transition */
+            opacity: 0; /* Initially transparent */
+            transition: opacity 0.5s; /* Smooth transition for visibility */
+            z-index: 0; /* Behind all content */
         }
         .show-gradient {
-            opacity: 1; /* Show gradient when the class is added */
+            opacity: 1; /* Fully visible when class is added */
         }
         h1 {
             font-size: 48px;
             opacity: 1;
             animation: flicker 2s infinite;
-            z-index: 1;
+            z-index: 1; /* On top of gradient */
         }
         @keyframes flicker {
             0%, 100% { opacity: 1; }
@@ -135,8 +136,8 @@
     </style>
 </head>
 <body>
+    <div class="gradient" id="gradient"></div><!-- Gradient div -->
     <div class="container">
-        <div class="gradient" id="gradient"></div><!-- Gradient div -->
         <h1>KEEP SMILING.</h1>
         <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
         <div>
@@ -146,12 +147,12 @@
         <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
         <div id="loading-animation"></div>
         <div class="ascii-art" id="ascii-art">
-            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⣶⣶⣶⣶⣶⣶⣶⣶⣶⣦⣀⡀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠚⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠢⣄⡈⠡⢀⡴⠊⠀⠀⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣧⠀⠈⣷⡀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣶⣶⣶⣶⣶⣶⣶⣶⣶⣦⣀⡀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠚⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠢⣄⡈⠡⢀⡴⠊⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣧⠀⠈⣷⡀⠀⠀⠀⠀⠀⠀⠀\n
             ⠀⠀⠀⠀⠀⡰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠈⣷⡀⠀⠀⠀⠀⠀⠀\n
             ⠀⠀⠀⠀⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠙⡆⠀⠀⠀⠀⠀\n
-            ⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⣀⣴⢿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⣧⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⣀⣴⢿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⡏⠀⠀⠀⠀⠀⠀\n
             ⠀⠀⠀⠀⢸⣇⠀⡀⠀⠀⠀⠉⠻⣿⣟⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⡏⠀⠀⠀⠀⠀⠀\n
             ⠀⠀⠀⠀⠀⢿⣀⣸⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣇⠀⣀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⠞⠁⠀⠀⣼⠀⠀⡞⠁⠀⠀⠀⠀⠀⠀\n
             ⠀⠀⠀⠀⠀⠀⠈⠈⠉⠉⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠋⠁⠈⠉⠉⠉⣀⡴⠖⠉⠁⠀⠀⠀⠀⠀⠀⣠⡞⠁⠀⠀⠀⠀⠀⠀⠀\n
