@@ -1,0 +1,15 @@
+body {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.message {
+    font-family: 'Courier New', Courier, monospace; /* Use a pixel-like font */
+    font-size: 50px;
+    color: white;
+    text-shadow: 1px 1px 0 black;
+}
