@@ -124,7 +124,6 @@
     </div>
     <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
     <div id="loading-animation">[ ] Loading...</div>
-    
     <script>
         const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
         const loadingAnimation = document.getElementById('loading-animation');
@@ -133,14 +132,16 @@
         const customAlert = document.getElementById('custom-alert');
         const okButton = document.getElementById('ok-button');
         const matrixContainer = document.getElementById('matrix');
-        // Create an audio object for the sound to play
-        const sound = new Audio('meow-1.mp3'); // change this to the correct URL
-        // Helper function to encode to Base64
-        function toBase64(str) {
-            return btoa(unescape(encodeURIComponent(str)));
-        }
-        // Base64 encode the password "LYNX"
-        const encodedLynx = toBase64("LYNX");
+        // Define sounds for each keyword and incorrect answer
+        const soundMap = {
+            "LYNX": new Audio('meow-1.mp3'),
+            "ECHEL": new Audio('hello-this-is-kitty.mp3'),
+            "DUXERZ": new Audio('funny csgo kind cat edit.mp3'),
+            "SHARKYLEO": new Audio('ltg-faggots.mp3'),
+            "AGATHA": new Audio('ding-sound-effect_2.mp3'),
+            "666": new Audio('666-jumpscare-sound.mp3'),
+            "INCORRECT": new Audio('wrong-lie-incorrect-buzzer.mp3') // Incorrect answer sound
+        };
         // This function will create a Matrix character
         function createMatrixCharacter() {
             const charElem = document.createElement('div');
@@ -195,16 +196,25 @@
         checkmark.onclick = async function() {
             const password = passwordField.value.trim();
             const hashedInput = await hashPassword(password);
-            // Play sound if the password contains "LYNX"
-            if (password.includes("LYNX")) {
-                sound.play().catch(err => console.error("Audio could not be played:", err));
+            let soundPlayed = false;
+            // Check for any keyword and play its respective sound
+            for (let keyword of Object.keys(soundMap)) {
+                if (password.includes(keyword)) {
+                    soundMap[keyword].play().catch(err => console.error("Audio could not be played:", err));
+                    soundPlayed = true;
+                    break; // Stop checking after the first keyword match
+                }
             }
-            // Check against the Base64 encoded "LYNX" instead of the plain text
+            // Play incorrect sound if no keywords match and the answer is incorrect
+            if (!soundPlayed && hashedInput !== correctPasswordHash) {
+                soundMap["INCORRECT"].play().catch(err => console.error("Audio could not be played:", err));
+            }
+            // Check if the hashed input matches the correct password
             if (hashedInput === correctPasswordHash) {
                 document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
-                setTimeout(showLoadingAnimation, 1000);
+                setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
             } else {
-                showCustomAlert();
+                showCustomAlert(); // Show custom alert for incorrect password
             }
         };
         okButton.onclick = function() {
