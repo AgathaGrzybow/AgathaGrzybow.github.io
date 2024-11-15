@@ -1,28 +1,29 @@
 body {
     background-color: black;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    color: white;
 }
 
 .message {
-    font-family: 'Courier New', Courier, monospace; /* Use a pixel-like font */
+    font-family: 'Courier New', Courier, monospace; /* Pixel-like font */
     font-size: 50px;
-    color: white;
-    text-shadow: 1px 1px 0 black;
-    animation: flicker 1s infinite; /* Smooth flicker */
+    opacity: 1;
+    transition: opacity 1s; /* Smooth opacity transition */
 }
 
-@keyframes flicker {
-    0%, 19%, 100% {
-        opacity: 1; /* Fully visible */
-    }
-    20%, 24% {
-        opacity: 0; /* Hidden */
-    }
-    25%, 99% {
-        opacity: 1; /* Fully visible again */
-    }
+input[type="password"] {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 20px;
 }
