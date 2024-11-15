@@ -11,19 +11,26 @@
     <input type="password" id="password" placeholder="Enter Password" />
     <button id="submit">Submit</button>
     <script>
+        const correctPasswordHash = "Qk9JU1ZFUlQ="; // Base64 encoded value 
         const message = document.querySelector('.message');
+
         setInterval(() => {
             message.style.opacity = message.style.opacity === '0' ? '1' : '0';
         }, 3000);
 
         document.getElementById('submit').onclick = function () {
-            const password = document.getElementById('password').value;
-            if (password === 'BOISVERT') {
-                window.location.href = 'boisvert.html'; // Redirect to the secret page
+            const passwordField = document.getElementById('password');
+            const password = passwordField.value;
+
+            // Encode the input password to Base64
+            const hashedInput = btoa(password); // Simple demo of encoding to Base64
+
+            if (hashedInput === correctPasswordHash) {
+                window.location.href = 'BOISVERT.html'; // Redirect to the secret page
             } else {
                 alert('Incorrect password!');
             }
-        };
+        }
     </script>
 </body>
 </html>
