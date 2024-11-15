@@ -10,7 +10,7 @@ body {
 }
 
 .message {
-    font-family: 'Courier New', Courier, monospace; /* Pixel-like font */
+    font-family: 'Courier New', Courier, monospace; /* Use a pixel-like font */
     font-size: 50px;
     opacity: 1;
     transition: opacity 1s; /* Smooth opacity transition */
@@ -20,10 +20,26 @@ input[type="password"] {
     margin-top: 20px;
     padding: 10px;
     font-size: 20px;
+    background-color: black; /* Black filling */
+    color: #00FF00; /* Hacker-ish green */
+    border: 2px solid #00FF00; /* Green border */
+    border-radius: 5px; /* Slightly rounded corners */
+    width: 200px; /* Set a width that looks good */
 }
 
+/* Style for button */
 button {
     margin-top: 10px;
     padding: 10px;
     font-size: 20px;
+    background-color: black; /* Black filling */
+    color: #00FF00; /* Hacker-ish green */
+    border: 2px solid #00FF00; /* Same green border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+button:hover {
+    background-color: #00FF00; /* Change background to green on hover */
+    color: black; /* Change text color to black on hover */
 }
