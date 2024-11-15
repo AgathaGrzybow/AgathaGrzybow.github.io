@@ -10,14 +10,15 @@
             color: lime; /* Bright green color */
             font-family: monospace;
             overflow: hidden;
+            text-align: center; /* Center contents */
         }
-        
         #lock-animation {
             white-space: pre; /* Preserve whitespace in ASCII art */
             display: none; /* Hide by default */
+            font-size: 24px; /* Increase font size */
             animation: glitch 1s infinite alternate; /* Glitch effect */
+            margin-top: 20%; /* Centering on the page */
         }
-
         @keyframes glitch {
             0% { opacity: 1; }
             20% { opacity: 0.8; }
@@ -25,6 +26,10 @@
             60% { opacity: 0.6; }
             80% { opacity: 0.4; }
             100% { opacity: 1; }
+        }
+        /* Hide inputs and message when password is correct */
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -54,34 +59,32 @@
 
         function playLockAnimation() {
             const animationFrames = [
-                `.------.
-/  ~ ~   \\
-|  ~ ~ ~  |
-\\________/
-      |    |
-      |    |`,
-                `.------.
- /  ~ ~   \\
-|  ~ ~ ~  |
-\\________/
-      |    |
-      |    |
-      |    |   
-      |    |   
-      |    |   ( )`,
-                `.------.
- /  ~ ~   \\
-|  ~ ~ ~  |
-\\________/
-      |    |
-      |    |
-      |    |   
-      |    |   
-      |    |   [ ]`
+                `   .------.
+  /  ~ ~   \\
+ |  ~ ~ ~  |
+  \\________/
+      |   |
+      |   |`,
+                `   .------.
+  /  ~ ~   \\
+ |  ~ ~ ~  |
+  \\________/
+      |   |
+      |   |
+      |   |  ( )
+    [=======]`,
+                `   .------.
+  /  ~ ~   \\
+ |  ~ ~ ~  |
+  \\________/
+      |   |
+      |   |
+      |   |
+    [=======]`
             ];
 
             let currentFrame = 0;
-            lockAnimationDiv.style.display = 'block';
+            lockAnimationDiv.style.display = 'block'; // Show the ASCII art container
 
             const interval = setInterval(() => {
                 lockAnimationDiv.textContent = animationFrames[currentFrame];
@@ -104,6 +107,11 @@
             console.log('Input Hashed:', hashedInput); // Log the hashed input for comparison
 
             if (hashedInput === correctPasswordHash) {
+                // Hide all but ASCII art
+                document.body.querySelectorAll('.message, #password, #submit').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                lockAnimationDiv.style.display = 'block'; // Show the ASCII art
                 playLockAnimation(); // Play animation if password is correct
             } else {
                 alert('Incorrect password!');
