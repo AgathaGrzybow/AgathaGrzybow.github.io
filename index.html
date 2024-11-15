@@ -1,88 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Checker</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-            overflow: hidden;
-            height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-        h1 {
-            font-size: 48px;
-            opacity: 1;
-            animation: flicker 2s infinite;
-    }
-        @keyframes flicker {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-        .sub-text {
-            font-size: 20px;
-        }
-        .small {
-            font-size: 14px;
-    }
-        input[type="text"] {
-            background-color: black;
-            border: 2px solid lime;
-            border-radius: 20px;
-            color: white;
-            padding: 10px;
-            width: 250px;
-    }
-        #checkmark {
-            cursor: pointer;
-            font-size: 24px;
-            color: lime;
-    }
-        #custom-alert {
-            position: fixed;
-            top: -100px; / Offscreen /
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 128, 0, 0.9);
-    }
-        #ok-button {
-            background-color: black;
-            color: lime;
-            border: none;
-            border-radius: 3px;
-    }
-        #loading-animation {
-            display: none;
-            white-space: pre;
-            font-size: 24px;
-            margin-top: 20px;
-    }
-        .fade-out {
-            animation: fade 1s forwards;
-    }
-        @keyframes fade {
-            from { opacity: 1; }
-            to { opacity: 0; }
-    }
-    </style>
-</head>
-<body>
-    <h1>KEEP SMILING.</h1>
-    <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
-    <div>
-        <input type="text" id="password" placeholder="Enter password">
-        <span id="checkmark">✅</span>
-    </div>
-    <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
-    <div id="loading-animation"></div>
-
+</div>
     <script>
         const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
         const loadingAnimation = document.getElementById('loading-animation');
@@ -96,37 +12,40 @@
             const data = encoder.encode(password);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+        }
 
         function showCustomAlert() {
             customAlert.style.display = 'block';
             customAlert.style.top = '20px'; // Slide down into view
+            passwordField.disabled = true; // Disable input on alert
             setTimeout(() => {
                 customAlert.style.top = '-100px'; // Slide out of view
             }, 3000);
-    }
+        }
 
         function showLoadingAnimation() {
             loadingAnimation.style.display = 'block';
-            loadingAnimation.textContent = "[32m[          ]  Loading...";
-        loadingAnimation.style.color = 'lime'; // Set color to hacker-ish green
-        let progress = 0;
-        const interval = setInterval(() => {
-            if (progress < 10) {
-                progress++;
-                loadingAnimation.textContent = "[ " + "=".repeat(progress) + " ".repeat(10 - progress) + " ]  Loading" + ".&repeat(progress % 3)";
-        } else {
-            clearInterval(interval);
-            setTimeout(() => {
-                document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => {
-            el.classList.add('fade-out');
-            });
-            setTimeout(() => {
-            window.location.href = 'main.html'; // Redirect after loading
-            }, 1000);
-            }, 1000);
-     } }, 500); // Update every 500ms
-    }
+            loadingAnimation.textContent = "[          ] Loading...";
+            loadingAnimation.style.color = 'lime'; // Set color to hacker-ish green
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 10) {
+                    progress++;
+                    loadingAnimation.textContent = "[ " + "=".repeat(progress) + " ".repeat(10 - progress) + " ] Loading" + ".".repeat(progress % 3);
+                } else if (progress === 10) {
+                    loadingAnimation.textContent = "[==========] Loading...";
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => {
+                            el.classList.add('fade-out'); // Initiate fade out of UI components
+                        });
+                        setTimeout(() => {
+                            window.location.href = 'main.html'; // Redirect after loading
+                        }, 1000);
+                    }, 1000);
+                }
+            }, 500); // Update every 500ms
+        }
 
         checkmark.onclick = async function() {
             const password = passwordField.value.trim();
@@ -134,13 +53,14 @@
             if (hashedInput === correctPasswordHash) {
                 document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out')); // Initiate fade out of UI components
                 setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
-        } else {
-            showCustomAlert(); // Show custom alert for incorrect password
-        }
-    };
+            } else {
+                showCustomAlert(); // Show custom alert for incorrect password
+            }
+        };
 
         okButton.onclick = function() {
             customAlert.style.display = 'none'; // Hide the alert when OK is pressed
+            passwordField.disabled = false; // Re-enable the input
         };
     </script>
 </body>
