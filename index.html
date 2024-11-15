@@ -16,7 +16,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
+            position: relative; /* Necessary for absolute positioning of the matrix */
         }
         .matrix {
             position: absolute;
@@ -30,11 +30,14 @@
         .matrix span {
             color: lime;
             white-space: nowrap;
+            position: absolute;
+            bottom: 100%; /* Start above the screen */
             animation: fall linear infinite;
         }
         @keyframes fall {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+            to {
+                transform: translateY(100vh); /* Fall to the bottom of the viewport */
+            }
         }
         h1 {
             font-size: 48px;
@@ -47,7 +50,7 @@
         }
         .sub-text {
             font-size: 20px;
-            margin-bottom: 20px; 
+            margin-bottom: 20px; /* Added space between the text and password field */
             z-index: 1;
         }
         .small {
@@ -65,15 +68,15 @@
         #checkmark {
             cursor: pointer;
             font-size: 24px;
-            width: 30px; 
-            height: auto; 
-            margin-top: 16px; 
-            margin-left: 4px; 
+            width: 30px; /* Adjust as needed */
+            height: auto; /* Maintain aspect ratio */
+            margin-top: 24px; /* Moved down by a total of 24 pixels */
+            margin-left: 4px; /* Moved right by a total of 4 pixels */
             z-index: 1;
         }
         #custom-alert {
             position: fixed;
-            top: -100px; 
+            top: -100px; /* Offscreen */
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 128, 0, 0.9);
@@ -120,22 +123,21 @@
         const checkmark = document.getElementById('checkmark');
         const customAlert = document.getElementById('custom-alert');
         const okButton = document.getElementById('ok-button');
-        const matrixContainer = document.querySelector('.matrix');
+        // Function to create falling characters
         function createMatrixRain() {
-            const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            const numColumns = Math.floor(window.innerWidth / 20); // Adjust based on font size
-            let matrices = [];
+            const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Characters to fall
+            const numColumns = Math.floor(window.innerWidth / 20); // Adjust number of columns
             for (let i = 0; i < numColumns; i++) {
                 const span = document.createElement('span');
-                span.style.fontSize = Math.random() * (20 - 10) + 10 + 'px'; // Random font size between 10px and 20px
-                span.textContent = symbols.charAt(Math.floor(Math.random() * symbols.length));
-                span.style.animationDuration = Math.random() * (5 - 3) + 3 + 's'; // Random fall duration between 3s and 5s
+                span.textContent = symbols.charAt(Math.floor(Math.random() * symbols.length)); // Random character
+                span.style.left = (i * 20) + 'px'; // Positioning each column
+                span.style.animationDuration = Math.random() * 2 + 3 + 's'; // Random fall duration
                 span.style.animationDelay = Math.random() * 5 + 's'; // Random start delay
-                matrices.push(span);
-                matrixContainer.appendChild(span);
+                // Append the character to the matrix
+                document.querySelector('.matrix').appendChild(span);
             }
         }
-        createMatrixRain();
+        createMatrixRain(); // Start the matrix rain
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
