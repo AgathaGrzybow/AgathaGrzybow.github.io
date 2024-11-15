@@ -3,98 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keep Smiling</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Password Checker</title>
     <style>
-        #lock-animation {
-            white-space: pre;
+        body {
+            background-color: black;
+            color: lime; /* Bright green color */
             font-family: monospace;
-            font-size: 16px;
-            display: none; /* Hide initially */
+            overflow: hidden;
+        }
+        
+        #lock-animation {
+            white-space: pre; /* Preserve whitespace in ASCII art */
+            display: none; /* Hide by default */
+            animation: glitch 1s infinite alternate; /* Glitch effect */
+        }
+
+        @keyframes glitch {
+            0% { opacity: 1; }
+            20% { opacity: 0.8; }
+            40% { opacity: 0.2; }
+            60% { opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div class="message">KEEP SMILING</div>
-    <input type="password" id="password" placeholder="Enter Password" />
+    <div class="message">Enter Password:</div>
+    <input type="text" id="password" />
     <button id="submit">Submit</button>
-    <div id="lock-animation"></div> <!-- Placeholder for the animation -->
-<script>
-const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be"; // Predefined hash
-const message = document.querySelector('.message');
-const lockAnimationDiv = document.getElementById('lock-animation');
+    <div id="lock-animation"></div>
 
-setInterval(() => {
-    message.style.opacity = message.style.opacity === '0' ? '1' : '0';
-}, 3000);
+    <script>
+        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be"; // Updated hashed password
+        const message = document.querySelector('.message');
+        const lockAnimationDiv = document.getElementById('lock-animation');
 
-async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hash = await crypto.subtle.digest('SHA-256', data);
-    const hashedString = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-    
-    console.log('Hashed Password:', hashedString); // Log the hashed password
-    return hashedString;
-}
+        setInterval(() => {
+            message.style.opacity = message.style.opacity === '0' ? '1' : '0';
+        }, 3000);
 
-function playLockAnimation() {
-    const animationFrames = [
-        `    .------.
-   /  ~ ~   \\
-  |  ~ ~ ~  |
-   \\________/
-     |    |
-     |    |`,
-        `    .------.
-   /  ~ ~   \\
-  |  ~ ~ ~  |
-   \\________/
-     |    |
-     |    |
-     |    |   
-     |    |   
-       ( )  `,
-        `    .------.
-   /  ~ ~   \\
-  |  ~ ~ ~  |
-   \\________/
-     |    |
-     |    |
-     |    |   
-     |    |   
-      [ ]   `
-    ];
-
-    let currentFrame = 0;
-    lockAnimationDiv.style.display = 'block'; // Show the ASCII art container
-
-    const interval = setInterval(() => {
-        lockAnimationDiv.textContent = animationFrames[currentFrame];
-        currentFrame++;
-        if (currentFrame === animationFrames.length) {
-            clearInterval(interval);
-            setTimeout(() => {
-                window.location.href = 'secret.html'; // Redirect to secret page after animation
-            }, 1000);
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            const hashedString = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+            console.log('Hashed Password:', hashedString);
+            return hashedString;
         }
-    }, 500); // Change frame every 500ms
-}
 
-document.getElementById('submit').onclick = async function () {
-    const passwordField = document.getElementById('password');
-    const password = passwordField.value.trim(); // Trim whitespace
-    const hashedInput = await hashPassword(password);
+        function playLockAnimation() {
+            const animationFrames = [
+                `.------.
+/  ~ ~   \\
+|  ~ ~ ~  |
+\\________/
+      |    |
+      |    |`,
+                `.------.
+ /  ~ ~   \\
+|  ~ ~ ~  |
+\\________/
+      |    |
+      |    |
+      |    |   
+      |    |   
+      |    |   ( )`,
+                `.------.
+ /  ~ ~   \\
+|  ~ ~ ~  |
+\\________/
+      |    |
+      |    |
+      |    |   
+      |    |   
+      |    |   [ ]`
+            ];
 
-    console.log('Input Password:', password); // Log input password
-    console.log('Input Hashed:', hashedInput); // Log the hashed input for comparison
+            let currentFrame = 0;
+            lockAnimationDiv.style.display = 'block';
 
-    if (hashedInput === correctPasswordHash) {
-        playLockAnimation(); // Play animation if password is correct
-    } else {
-        alert('Incorrect password!');
-    }
-};
-</script>
+            const interval = setInterval(() => {
+                lockAnimationDiv.textContent = animationFrames[currentFrame];
+                currentFrame++;
+                if (currentFrame === animationFrames.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        window.location.href = 'secret.html'; // Redirect to secret page after animation
+                    }, 1000);
+                }
+            }, 500); // Change frame every 500ms
+        }
+
+        document.getElementById('submit').onclick = async function () {
+            const passwordField = document.getElementById('password');
+            const password = passwordField.value.trim(); // Trim whitespace
+            const hashedInput = await hashPassword(password);
+
+            console.log('Input Password:', password); // Log input password
+            console.log('Input Hashed:', hashedInput); // Log the hashed input for comparison
+
+            if (hashedInput === correctPasswordHash) {
+                playLockAnimation(); // Play animation if password is correct
+            } else {
+                alert('Incorrect password!');
+            }
+        };
+    </script>
 </body>
 </html>
