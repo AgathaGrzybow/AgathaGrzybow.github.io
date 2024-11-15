@@ -17,7 +17,7 @@
             justify-content: center;
             align-items: center;
             position: relative; /* Added for matrix effect positioning */
-            }
+        }
         h1 {
             font-size: 48px;
             opacity: 1;
@@ -104,10 +104,13 @@
             white-space: nowrap;
             position: absolute;
             bottom: 100%;
-            animation: fall linear infinite;
+            animation: fall linear infinite, fade 1s forwards; /* Add fade effect */
         }
         @keyframes fall {
             to { transform: translateY(100vh); }
+        }
+        @keyframes fade {
+            to { opacity: 0; } /* Fades out during fall */
         }
     </style>
 </head>
@@ -130,7 +133,7 @@
         const okButton = document.getElementById('ok-button');
         const matrixContainer = document.getElementById('matrix');
         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const characterCount = 150; // Number of characters to generate
+        const characterCount = 50; // Reduced number of characters to generate
         function createMatrixRain() {
             for (let i = 0; i < characterCount; i++) {
                 const charElem = document.createElement('div');
@@ -147,7 +150,7 @@
             }
         }
         function startMatrixRain() {
-            setInterval(createMatrixRain, 100); // Generate new characters every 100ms
+            setInterval(createMatrixRain, 150); // Generate new characters every 150ms
         }
         async function hashPassword(password) {
             const encoder = new TextEncoder();
