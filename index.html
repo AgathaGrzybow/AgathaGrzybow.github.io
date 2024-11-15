@@ -1,185 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GREETINGS.</title>
-<style>
-body {
-background-color: black;
-color: white;
-font-family: 'Courier New', Courier, monospace;
-text-align: center;
-overflow: hidden;
-height: 100vh;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-}
-h1 {
-font-size: 48px;
-opacity: 1;
-animation: flicker 2s infinite;
-}
-@keyframes flicker {
-0%, 100% { opacity: 1; }
-50% { opacity: 0.5; }
-}
-.sub-text {
-font-size: 20px;
-margin-bottom: 20px; /* Space between text and password field */
-}
-.small {
-font-size: 14px;
-}
-input[type="text"] {
-background-color: black;
-border: 2px solid lime;
-border-radius: 20px;
-color: white;
-padding: 10px;
-width: 250px;
-}
-#checkmark {
-cursor: pointer;
-font-size: 24px;
-width: 30px; /* Checkmark width */
-height: auto; /* Maintain aspect ratio */
-margin-top: 32px; /* 32 pixels down (moved 8 pixels down) */
-margin-left: 4px; /* 4 pixels right */
-display: inline-block; /* Ensure proper positioning with margins */
-}
-#custom-alert {
-position: fixed;
-top: -100px; /* Offscreen */
-left: 50%;
-transform: translateX(-50%);
-background-color: rgba(0, 128, 0, 0.9);
-transition: top 0.5s;
-}
-#ok-button {
-background-color: black;
-color: lime;
-border: none;
-border-radius: 3px;
-}
-#loading-animation {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100vh;
-background-color: #000;
-display: none;
-}
-#matrix-rain {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100vh;
-}
-#matrix-rain span {
-position: absolute;
-color: #33CC33;
-font-size: 14px;
-animation: matrixRain 2s infinite;
-}
-@keyframes matrixRain {
-0% {
-transform: translateY(0);
-}
-100% {
-transform: translateY(-100%);
-}
-}
-.fade-out {
-animation: fade 1s forwards;
-}
-@keyframes fade {
-from { opacity: 1; }
-to { opacity: 0; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREETINGS.</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            font-size: 48px;
+            opacity: 1;
+            animation: flicker 2s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .sub-text {
+            font-size: 20px;
+            margin-bottom: 20px; /* Space between text and password field */
+        }
+        .small {
+            font-size: 14px;
+        }
+        input[type="text"] {
+            background-color: black;
+            border: 2px solid lime;
+            border-radius: 20px;
+            color: white;
+            padding: 10px;
+            width: 250px;
+        }
+        #checkmark {
+            cursor: pointer;
+            font-size: 24px;
+            width: 30px; /* Checkmark width */
+            height: auto; /* Maintain aspect ratio */
+            margin-top: 24px; /* 24 pixels down */
+            margin-left: 4px; /* 4 pixels right */
+            display: inline-block; /* Ensure proper positioning with margins */
+        }
+        #custom-alert {
+            position: fixed;
+            top: -100px; /* Offscreen */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 128, 0, 0.9);
+            transition: top 0.5s;
+        }
+        #ok-button {
+            background-color: black;
+            color: lime;
+            border: none;
+            border-radius: 3px;
+        }
+        #loading-animation {
+            display: none;
+            white-space: pre;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .fade-out {
+            animation: fade 1s forwards;
+        }
+        @keyframes fade {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-<h1>KEEP SMILING.</h1>
-<div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
-<div>
-<input type="text" id="password" placeholder="Enter password">
-<img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark"> <!-- Checkmark image -->
-</div>
-<div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
-<div id="loading-animation">[ ] Loading...</div>
-<div id="matrix-rain"></div>
-<script>
-const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
-const loadingAnimation = document.getElementById('loading-animation');
-const passwordField = document.getElementById('password');
-const checkmark = document.getElementById('checkmark');
-const customAlert = document.getElementById('custom-alert');
-const okButton = document.getElementById('ok-button');
-const matrixRain = document.getElementById('matrix-rain');
-async function hashPassword(password) {
-const encoder = new TextEncoder();
-const data = encoder.encode(password);
-const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-function showCustomAlert() {
-customAlert.style.display = 'block';
-customAlert.style.top = '20px'; // Slide down into view
-setTimeout(() => {
-customAlert.style.top = '-100px'; // Slide out of view after 3 seconds
-}, 3000);
-}
-function showLoadingAnimation() {
-loadingAnimation.style.display = 'block';
-loadingAnimation.textContent = "[ ] Loading...";
-loadingAnimation.style.color = 'lime'; // Set color to hacker-ish green
-let progress = 0;
-const interval = setInterval(() => {
-if (progress < 10) {
-progress++;
-loadingAnimation.textContent = "[ " + "=".repeat(progress) + " ".repeat(10 - progress) + " ] Loading" + ".".repeat(progress % 3);
-} else {
-clearInterval(interval);
-setTimeout(() => {
-document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
-setTimeout(() => {
-window.location.href = 'main.html'; // Redirect after loading
-}, 1000);
-}, 1000);
-}
-}, 500); // Update every 500ms
-}
-function createMatrixRain() {
-for (let i = 0; i < 100; i++) {
-let rainDrop = document.createElement('span');
-rainDrop.textContent = String.fromCharCode(9608); // Rain drop character
-rainDrop.style.top = ${Math.random() * 100}%;
-rainDrop.style.left = ${Math.random() * 100}%;
-rainDrop.style.animationDuration = ${Math.random() * 5 + 2}s;
-rainDrop.style.animationDelay = ${Math.random() * 2}s;
-matrixRain.appendChild(rainDrop);
-}
-}
-checkmark.onclick = async function() {
-const password = passwordField.value.trim();
-const hashedInput = await hashPassword(password);
-if (hashedInput === correctPasswordHash) {
-document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out')); // Initiate fade out of UI components
-setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
-createMatrixRain(); // Create matrix rain
-document.getElementById('matrix-rain').style.display = 'block'; // Show matrix rain
-} else {
-showCustomAlert(); // Show custom alert for incorrect password
-}
-};
-okButton.onclick = function() {
-customAlert.style.display = 'none'; // Hide the alert when OK is pressed
-};
-</script>
+    <h1>KEEP SMILING.</h1>
+    <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
+    <div>
+        <input type="text" id="password" placeholder="Enter password">
+        <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark"> <!-- Checkmark image -->
+    </div>
+    <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
+    <div id="loading-animation">[ ] Loading...</div>
+    <script>
+        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
+        const loadingAnimation = document.getElementById('loading-animation');
+        const passwordField = document.getElementById('password');
+        const checkmark = document.getElementById('checkmark');
+        const customAlert = document.getElementById('custom-alert');
+        const okButton = document.getElementById('ok-button');
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        function showCustomAlert() {
+            customAlert.style.display = 'block';
+            customAlert.style.top = '20px'; // Slide down into view
+            setTimeout(() => {
+                customAlert.style.top = '-100px'; // Slide out of view after 3 seconds
+            }, 3000);
+        }
+        function showLoadingAnimation() {
+            loadingAnimation.style.display = 'block';
+            loadingAnimation.textContent = "[ ] Loading...";
+            loadingAnimation.style.color = 'lime'; // Set color to hacker-ish green
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 10) {
+                    progress++;
+                    loadingAnimation.textContent = "[ " + "=".repeat(progress) + " ".repeat(10 - progress) + " ] Loading" + ".".repeat(progress % 3);
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
+                        setTimeout(() => {
+                            window.location.href = 'main.html'; // Redirect after loading
+                        }, 1000);
+                    }, 1000);
+                }
+            }, 500); // Update every 500ms
+        }
+        checkmark.onclick = async function() {
+            const password = passwordField.value.trim();
+            const hashedInput = await hashPassword(password);
+            if (hashedInput === correctPasswordHash) {
+                document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out')); // Initiate fade out of UI components
+                setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
+            } else {
+                showCustomAlert(); // Show custom alert for incorrect password
+            }
+        };
+        okButton.onclick = function() {
+            customAlert.style.display = 'none'; // Hide the alert when OK is pressed
+        };
+    </script>
 </body>
 </html>
