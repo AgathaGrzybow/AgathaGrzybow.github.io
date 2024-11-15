@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Checker</title>
+    <title>GREETINGS.</title>
     <style>
         body {
             background-color: black;
@@ -12,26 +12,38 @@
             text-align: center;
             overflow: hidden;
             height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(to bottom, black, lime);
+            overflow-y: auto; /* Enable scrolling */
+        }
         h1 {
             font-size: 48px;
             opacity: 1;
             animation: flicker 2s infinite;
-    }
+            z-index: 1;
+        }
         @keyframes flicker {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
         .sub-text {
             font-size: 20px;
+            z-index: 1;
         }
         .small {
             font-size: 14px;
-    }
+        }
         input[type="text"] {
             background-color: black;
             border: 2px solid lime;
@@ -39,50 +51,108 @@
             color: white;
             padding: 10px;
             width: 250px;
-    }
+            z-index: 1;
+        }
         #checkmark {
             cursor: pointer;
-            font-size: 24px;
-            color: lime;
-    }
+            width: 30px; /* Adjust as needed */
+            height: auto; /* Maintain aspect ratio */
+            z-index: 1;
+        }
         #custom-alert {
             position: fixed;
-            top: -100px; / Offscreen /
+            top: -100px; /* Offscreen */
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 128, 0, 0.9);
-    }
+            transition: top 0.5s;
+            z-index: 2;
+        }
         #ok-button {
             background-color: black;
             color: lime;
             border: none;
             border-radius: 3px;
-    }
+        }
         #loading-animation {
             display: none;
             white-space: pre;
             font-size: 24px;
             margin-top: 20px;
-    }
+        }
         .fade-out {
             animation: fade 1s forwards;
-    }
+        }
         @keyframes fade {
             from { opacity: 1; }
             to { opacity: 0; }
-    }
+        }
+        .ascii-art {
+            display: none;
+            color: black; /* ASCII art color */
+            font-family: monospace;
+            white-space: pre;
+            margin: 20px;
+            z-index: 1;
+            opacity: 0; /* Initially hidden */
+            animation: glitch 1s infinite; /* Apply glitch animation */
+        }
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+                opacity: 1;
+            }
+            20% {
+                transform: translate(-2px, -2px);
+                opacity: 0.6;
+            }
+            40% {
+                transform: translate(2px, 2px);
+                opacity: 0.8;
+            }
+            60% {
+                transform: translate(-2px, 2px);
+                opacity: 0.5;
+            }
+            80% {
+                transform: translate(2px, -2px);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>KEEP SMILING.</h1>
-    <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
-    <div>
-        <input type="text" id="password" placeholder="Enter password">
-        <span id="checkmark">✅</span>
+    <div class="container">
+        <h1>KEEP SMILING.</h1>
+        <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
+        <div>
+            <input type="text" id="password" placeholder="Input a name."> <!-- Changed placeholder text -->
+            <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark"> <!-- Image for checkmark -->
+        </div>
+        <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
+        <div id="loading-animation"></div>
+        <div class="ascii-art" id="ascii-art">
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣠⣤⣤⣤⣤⣤⣤⣤⣄⣀⡀\n
+            ⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠊⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠳⣄⡀\n
+            ⠀⠀⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧\n
+            ⠀⠀⠀⠀⠀⡜⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧\n
+            ⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣇\n
+            ⠀⠀⠀⠀⠀⣹⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇\n
+            ⠀⠀⠀⠀⣰⡟⠁⠀⣀⣤⣤⣤⣴⣦⣤⣤⣤⣤⣶⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇\n
+            ⠀⠀⢸⠀⣿⢃⣴⣿⣿⡿⠋⠉⠉⣉⣉⣉⡉⠉⢻⣿⣿⣿⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠁\n
+            ⠀⠀⠈⡆⢹⣾⡟⠁⠀⠀⠀⠀⣾⡏⠛⠿⠿⢷⡜⠻⣿⣿⣷⡀⠀⠀⠀⠀⠀⢀⣠⡞⠀⠀\n
+            ⠀⠀⠀⡇⠈⡟⠄⠀⠀⠀⢀⣾⡏⠀⠀⠀⠀⠀⣣⡄⠸⣟⣻⣿⣷⠀⠀⠀⠠⠊⠁⠀⠀⠀\n
+            ⠀⠀⠀⠁⠀⡇⠀⠀⠀⠀⣿⣿⣿⣷⣤⣤⣤⣴⣿⣷⣶⠼⠿⡿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⣇⠀⠀⠀⠀⠛⠿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠘⣆⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⠻⢷⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠈⠳⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠳⠤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀\n
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠲⢤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣬⣭⣍⣉⣂⣀⡀⠀
+        </div>
     </div>
-    <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
-    <div id="loading-animation"></div>
-
     <script>
         const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
         const loadingAnimation = document.getElementById('loading-animation');
@@ -90,57 +160,58 @@
         const checkmark = document.getElementById('checkmark');
         const customAlert = document.getElementById('custom-alert');
         const okButton = document.getElementById('ok-button');
-
+        const asciiArt = document.getElementById('ascii-art');
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
+        }
         function showCustomAlert() {
             customAlert.style.display = 'block';
             customAlert.style.top = '20px'; // Slide down into view
+            passwordField.disabled = true; // Disable input field
             setTimeout(() => {
                 customAlert.style.top = '-100px'; // Slide out of view
+                passwordField.disabled = false; // Re-enable input field
             }, 3000);
-    }
-
+        }
         function showLoadingAnimation() {
             loadingAnimation.style.display = 'block';
-            loadingAnimation.textContent = "[32m[          ]  Loading...";
-        loadingAnimation.style.color = 'lime'; // Set color to hacker-ish green
-        let progress = 0;
-        const interval = setInterval(() => {
-            if (progress < 10) {
-                progress++;
-                loadingAnimation.textContent = "[ " + "=".repeat(progress) + " ".repeat(10 - progress) + " ]  Loading" + ".&repeat(progress % 3)";
-        } else {
-            clearInterval(interval);
-            setTimeout(() => {
-                document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => {
-            el.classList.add('fade-out');
-            });
-            setTimeout(() => {
-            window.location.href = 'main.html'; // Redirect after loading
-            }, 1000);
-            }, 1000);
-     } }, 500); // Update every 500ms
-    }
-
+            loadingAnimation.textContent = "[          ]  Loading...";
+            loadingAnimation.style.color = 'lime'; // Set color to hacker-ish green
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 10) {
+                    progress++;
+                    loadingAnimation.textContent = "[ " + "=".repeat(progress) + " ".repeat(10 - progress) + " ]  Loading" + ".".repeat(progress % 3);
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
+                        setTimeout(() => {
+                            asciiArt.style.display = 'block'; // Show ASCII art at the bottom
+                        }, 1000);
+                        setTimeout(() => {
+                            window.location.href = 'main.html'; // Redirect after displaying ASCII art
+                        }, 3000); // Allow 3 seconds to view ASCII art before redirect
+                    }, 1000);
+                }
+            }, 500); // Update every 500ms
+        }
         checkmark.onclick = async function() {
             const password = passwordField.value.trim();
             const hashedInput = await hashPassword(password);
             if (hashedInput === correctPasswordHash) {
                 document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out')); // Initiate fade out of UI components
                 setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
-        } else {
-            showCustomAlert(); // Show custom alert for incorrect password
-        }
-    };
-
+            } else {
+                showCustomAlert(); // Show custom alert for incorrect password
+            }
+        };
         okButton.onclick = function() {
             customAlert.style.display = 'none'; // Hide the alert when OK is pressed
+            passwordField.disabled = false; // Re-enable input field
         };
     </script>
 </body>
