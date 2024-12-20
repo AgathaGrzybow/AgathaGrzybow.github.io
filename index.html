@@ -193,8 +193,8 @@
                 }
             }, 500);
         }
-        // Checkmark click event
-        checkmark.onclick = async function() {
+        // Combined function to check password
+        async function checkPassword() {
             const password = passwordField.value.trim();
             const hashedInput = await hashPassword(password);
             let soundPlayed = false;
@@ -223,7 +223,15 @@
             } else {
                 showCustomAlert(); // Show custom alert for incorrect password
             }
-        };
+        }
+        // Checkmark click event
+        checkmark.onclick = checkPassword;
+        // Event listener for pressing Enter in the password field
+        passwordField.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword(); // Trigger the password check
+            }
+        });
         okButton.onclick = function() {
             customAlert.style.display = 'none'; 
         };
