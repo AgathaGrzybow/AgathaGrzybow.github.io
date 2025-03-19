@@ -187,10 +187,15 @@
         // Snake Game Logic
         function startSnakeGame() {
             const gridSize = 10;
-            let snake = [{ x: 5, y: 5 }];
-            let direction = { x: 0, y: 0 };
+            let snake = [{ x: 5, y: 5 }]; // Initial snake position (middle of the grid)
+            let direction = { x: 1, y: 0 }; // Initial direction (right)
             let food = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
             let gameInterval;
+
+            // Ensure food doesn't spawn on the snake
+            while (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                food = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
+            }
 
             function draw() {
                 let grid = '';
@@ -213,19 +218,27 @@
                 const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
                 // Check for collisions
-                if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                if (
+                    head.x < 0 || head.x >= gridSize || // Wall collision
+                    head.y < 0 || head.y >= gridSize || // Wall collision
+                    snake.some(segment => segment.x === head.x && segment.y === head.y) // Self-collision
+                ) {
                     clearInterval(gameInterval);
-                    snakeGameContainer.textContent = "Game Over!\n";
+                    snakeGameContainer.textContent = "Game Over!\n" + snakeGameContainer.textContent;
                     return;
                 }
 
                 // Check for food
                 if (head.x === food.x && head.y === food.y) {
-                    snake.unshift(head);
+                    snake.unshift(head); // Grow the snake
                     food = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
+                    // Ensure food doesn't spawn on the snake
+                    while (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                        food = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
+                    }
                 } else {
-                    snake.unshift(head);
-                    snake.pop();
+                    snake.unshift(head); // Move the snake
+                    snake.pop(); // Remove the tail
                 }
 
                 draw();
@@ -233,13 +246,14 @@
 
             // Handle keyboard input
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -1 };
-                if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: 1 };
-                if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -1, y: 0 };
-                if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: 1, y: 0 };
+                if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -1 }; // Move up
+                if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: 1 }; // Move down
+                if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -1, y: 0 }; // Move left
+                if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: 1, y: 0 }; // Move right
             });
 
-            gameInterval = setInterval(update, 500);
+            draw(); // Draw the initial state
+            gameInterval = setInterval(update, 500); // Start the game loop
         }
         // Function to show loading animation
         function showLoadingAnimation() {
