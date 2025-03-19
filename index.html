@@ -3,72 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glitch Site</title>
+    <title>GREETINGS.</title>
     <style>
-        /* Global styles */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Courier New', Courier, monospace;
+        body {
+            background-color: black;
             color: white;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
             overflow: hidden;
-            background: black; /* Start completely black */
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
+            position: relative;
         }
-
-        /* Corrupted text effect */
-        @keyframes glitch-text {
-            0% {
-                clip-path: inset(0 0 0 0);
-            }
-            10% {
-                clip-path: inset(10% 0 20% 0);
-            }
-            20% {
-                clip-path: inset(40% 0 10% 0);
-            }
-            30% {
-                clip-path: inset(20% 0 30% 0);
-            }
-            40% {
-                clip-path: inset(50% 0 10% 0);
-            }
-            50% {
-                clip-path: inset(30% 0 20% 0);
-            }
-            60% {
-                clip-path: inset(10% 0 40% 0);
-            }
-            70% {
-                clip-path: inset(20% 0 30% 0);
-            }
-            80% {
-                clip-path: inset(40% 0 10% 0);
-            }
-            90% {
-                clip-path: inset(10% 0 20% 0);
-            }
-            100% {
-                clip-path: inset(0 0 0 0);
-            }
+        h1 {
+            font-size: 48px;
+            opacity: 1;
+            animation: flicker 2s infinite;
+            position: relative;
+            z-index: 1;
         }
-
-        /* Flickering effect */
         @keyframes flicker {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
-
-        /* Password field styling */
+        .sub-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .small {
+            font-size: 14px;
+        }
         input[type="text"] {
             background-color: black;
             border: 2px solid lime;
@@ -78,56 +47,46 @@
             width: 250px;
             position: relative;
             z-index: 1;
-            font-family: 'Courier New', Courier, monospace;
-            animation: glitch-text 1s infinite, flicker 0.5s infinite;
         }
-
-        /* Pseudo-elements for additional glitch effect */
-        input[type="text"]::before,
-        input[type="text"]::after {
-            content: attr(placeholder);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 10px;
-            border-radius: 20px;
-            color: white;
+        #checkmark {
+            cursor: pointer;
+            font-size: 24px;
+            width: 30px;
+            height: auto;
+            margin-top: 24px;
+            margin-left: 4px;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+        #custom-alert {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 128, 0, 0.9);
+            transition: top 0.5s;
+            z-index: 1;
+        }
+        #ok-button {
             background-color: black;
-            opacity: 0;
-            pointer-events: none;
-            animation: glitch-text 1s infinite;
+            color: lime;
+            border: none;
+            border-radius: 3px;
         }
-
-        input[type="text"]::before {
-            clip-path: inset(0 0 50% 0);
-            animation-delay: 0.1s;
-        }
-
-        input[type="text"]::after {
-            clip-path: inset(50% 0 0 0);
-            animation-delay: 0.2s;
-        }
-
-        /* Loading animation container */
         #loading-animation {
             display: none;
             white-space: pre;
             font-size: 24px;
             margin-top: 20px;
         }
-
-        /* Snake game container */
-        #snake-game {
-            display: none;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            white-space: pre;
-            text-align: center;
-            margin-top: 20px;
+        .fade-out {
+            animation: fade 1s forwards;
         }
-
+        @keyframes fade {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
         /* Matrix Rain */
         #matrix {
             position: absolute;
@@ -138,7 +97,6 @@
             overflow: hidden;
             z-index: 0;
         }
-
         .matrix-character {
             color: lime;
             font-size: 20px;
@@ -148,7 +106,6 @@
             bottom: 100%;
             animation: fall linear forwards;
         }
-
         @keyframes fall {
             to { 
                 transform: translateY(100vh); 
@@ -167,11 +124,26 @@
     </div>
     <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
     <div id="loading-animation">[ ] Loading...</div>
-    <div id="snake-game"></div>
-
     <script>
-        // Matrix rain effect
+        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
+        const loadingAnimation = document.getElementById('loading-animation');
+        const passwordField = document.getElementById('password');
+        const checkmark = document.getElementById('checkmark');
+        const customAlert = document.getElementById('custom-alert');
+        const okButton = document.getElementById('ok-button');
         const matrixContainer = document.getElementById('matrix');
+        // Define sounds for each keyword and incorrect answer
+        const soundMap = {
+            "LYNX": new Audio('meow-1.mp3'),
+            "ECHEL": new Audio('hello-this-is-kitty.mp3'),
+            "DUXERZ": new Audio('duxa.mp3'),
+            "SHARKYLEO": new Audio('ltg-faggots.mp3'),
+            "AGATHA": new Audio('ding-sound-effect_2.mp3'),
+            "666": new Audio('666-jumpscare-sound.mp3'),
+            "INCORRECT": new Audio('wrong-lie-incorrect-buzzer.mp3'), // Incorrect answer sound
+            "CORE": new Audio('Oh my gah.mp3') // New sound for CORE
+        };
+        // This function will create a Matrix character
         function createMatrixCharacter() {
             const charElem = document.createElement('div');
             charElem.className = 'matrix-character';
@@ -181,117 +153,94 @@
             matrixContainer.appendChild(charElem);
             charElem.addEventListener('animationend', () => charElem.remove());
         }
-
         function startMatrixRain() {
             setInterval(createMatrixCharacter, 300);
         }
+        // Function for hashing the password
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        // Function to show custom alert
+        function showCustomAlert() {
+            customAlert.style.display = 'block';
+            customAlert.style.top = '20px'; 
+            setTimeout(() => {
+                customAlert.style.top = '-100px'; 
+            }, 3000);
+        }
+        // Function to show loading animation
+        function showLoadingAnimation() {
+            loadingAnimation.style.display = 'block';
+            loadingAnimation.textContent = "[ ] Loading...";
+            loadingAnimation.style.color = 'lime';
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 10) {
+                    progress++;
+                    loadingAnimation.textContent = "[ " + '='.repeat(progress) + ' '.repeat(10 - progress) + ' ] Loading' + ".".repeat(progress % 3);
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        // Fade out all UI components
+                        document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
+                        setTimeout(() => {
+                            window.location.href = 'main.html'; // Redirect after loading
+                        }, 1000);
+                    }, 1000);
+                }
+            }, 500);
+        }
+        // Combined function to check password
+        async function checkPassword() {
+            const password = passwordField.value.trim().toUpperCase(); // Ensure uppercase
+            const hashedInput = await hashPassword(password);
+            let soundPlayed = false;
 
-        // Start the matrix rain effect when the page loads
-        startMatrixRain();
-
-        // Snake minigame
-        const snakeGame = document.getElementById('snake-game');
-        const loadingAnimation = document.getElementById('loading-animation');
-
-        let snake = [{ x: 10, y: 10 }];
-        let food = { x: 5, y: 5 };
-        let direction = { x: 0, y: 0 };
-        let score = 0;
-
-        function drawSnake() {
-            let board = '';
-            for (let y = 0; y < 20; y++) {
-                for (let x = 0; x < 20; x++) {
-                    if (snake.some(segment => segment.x === x && segment.y === y)) {
-                        board += 'O'; // Snake body
-                    } else if (food.x === x && food.y === y) {
-                        board += 'X'; // Food
+            // Check for exact keyword matches and play their respective sounds
+            for (let keyword of Object.keys(soundMap)) {
+                if (password === keyword) { // Use strict equality
+                    if (keyword === "CORE") {
+                        soundMap[keyword].play().catch(err => console.error("Audio could not be played:", err));
+                        showCustomAlert(); // Optionally show alert for "CORE"
+                        return; // Prevent further processing
                     } else {
-                        board += '.'; // Empty space
+                        soundMap[keyword].play().catch(err => console.error("Audio could not be played:", err));
+                        soundPlayed = true;
+                        break; // Stop checking after the first keyword match
                     }
                 }
-                board += '\n';
-            }
-            snakeGame.textContent = board + `Score: ${score}`;
-        }
-
-        function updateSnake() {
-            const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
-
-            // Check for collision with walls or itself
-            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-                resetGame();
-                return;
             }
 
-            snake.unshift(head);
+            // Play incorrect sound if no keywords match and the answer is incorrect
+            if (!soundPlayed && hashedInput !== correctPasswordHash) {
+                soundMap["INCORRECT"].play().catch(err => console.error("Audio could not be played:", err));
+            }
 
-            // Check if snake eats food
-            if (head.x === food.x && head.y === food.y) {
-                score++;
-                placeFood();
+            // Check if the hashed input matches the correct password
+            if (hashedInput === correctPasswordHash) {
+                document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
+                setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
             } else {
-                snake.pop();
+                showCustomAlert(); // Show custom alert for incorrect password
             }
         }
-
-        function placeFood() {
-            food = {
-                x: Math.floor(Math.random() * 20),
-                y: Math.floor(Math.random() * 20)
-            };
-        }
-
-        function resetGame() {
-            snake = [{ x: 10, y: 10 }];
-            direction = { x: 0, y: 0 };
-            score = 0;
-            placeFood();
-        }
-
-        function gameLoop() {
-            updateSnake();
-            drawSnake();
-        }
-
-        window.addEventListener('keydown', (e) => {
-            switch (e.key) {
-                case 'ArrowUp':
-                    if (direction.y === 0) direction = { x: 0, y: -1 };
-                    break;
-                case 'ArrowDown':
-                    if (direction.y === 0) direction = { x: 0, y: 1 };
-                    break;
-                case 'ArrowLeft':
-                    if (direction.x === 0) direction = { x: -1, y: 0 };
-                    break;
-                case 'ArrowRight':
-                    if (direction.x === 0) direction = { x: 1, y: 0 };
-                    break;
+        // Checkmark click event
+        checkmark.onclick = checkPassword;
+        // Event listener for pressing Enter in the password field
+        passwordField.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword(); // Trigger the password check
             }
         });
-
-        // Start the snake game loop
-        const snakeInterval = setInterval(gameLoop, 200);
-
-        // Show the snake game during loading
-        let progress = 0;
-        const loadingInterval = setInterval(() => {
-            if (progress < 20) {
-                progress++;
-                loadingAnimation.textContent = "[ " + '='.repeat(progress) + ' '.repeat(20 - progress) + ' ] Loading" + ".".repeat(progress % 3);
-            } else {
-                clearInterval(loadingInterval);
-                clearInterval(snakeInterval); // Stop the snake game
-                loadingAnimation.style.display = 'none';
-                snakeGame.style.display = 'none';
-                window.location.href = 'main.html'; // Redirect to main.html
-            }
-        }, 500);
-
-        // Show the snake game during loading
-        loadingAnimation.style.display = 'block';
-        snakeGame.style.display = 'block';
+        okButton.onclick = function() {
+            customAlert.style.display = 'none'; 
+        };
+        
+        // Start the matrix rain effect when the page loads
+        startMatrixRain();
     </script>
 </body>
 </html>
