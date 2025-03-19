@@ -81,6 +81,16 @@
             margin-top: 20px;
             color: lime;
         }
+        #snake-game {
+            display: none;
+            white-space: pre;
+            font-size: 16px;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
         .fade-out {
             animation: fade 1s forwards;
         }
@@ -125,6 +135,7 @@
     </div>
     <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
     <div id="loading-animation">[ ] Loading...</div>
+    <div id="snake-game"></div> <!-- Snake game container -->
     <script>
         const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
         const loadingAnimation = document.getElementById('loading-animation');
@@ -133,6 +144,7 @@
         const customAlert = document.getElementById('custom-alert');
         const okButton = document.getElementById('ok-button');
         const matrixContainer = document.getElementById('matrix');
+        const snakeGameContainer = document.getElementById('snake-game');
         // Define sounds for each keyword and incorrect answer
         const soundMap = {
             "LYNX": new Audio('meow-1.mp3'),
@@ -194,7 +206,7 @@
                     }
                     grid += '\n';
                 }
-                loadingAnimation.textContent = grid;
+                snakeGameContainer.textContent = grid;
             }
 
             function update() {
@@ -203,7 +215,7 @@
                 // Check for collisions
                 if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
                     clearInterval(gameInterval);
-                    loadingAnimation.textContent = "Game Over!\n[ ] Loading...";
+                    snakeGameContainer.textContent = "Game Over!\n";
                     return;
                 }
 
@@ -232,11 +244,13 @@
         // Function to show loading animation
         function showLoadingAnimation() {
             loadingAnimation.style.display = 'block';
+            snakeGameContainer.style.display = 'block';
             startSnakeGame(); // Start the Snake game
             let progress = 0;
             const interval = setInterval(() => {
-                if (progress < 10) {
+                if (progress < 20) { // Longer loading duration
                     progress++;
+                    loadingAnimation.textContent = "[ " + '='.repeat(progress) + ' '.repeat(20 - progress) + ' ] Loading' + ".".repeat(progress % 3);
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
@@ -247,7 +261,7 @@
                         }, 1000);
                     }, 1000);
                 }
-            }, 500);
+            }, 500); // Slower progress update
         }
         // Combined function to check password
         async function checkPassword() {
