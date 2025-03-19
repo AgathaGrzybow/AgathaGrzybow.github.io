@@ -21,6 +21,95 @@
             text-align: center;
         }
 
+        /* Corrupted text effect */
+        @keyframes glitch-text {
+            0% {
+                clip-path: inset(0 0 0 0);
+            }
+            10% {
+                clip-path: inset(10% 0 20% 0);
+            }
+            20% {
+                clip-path: inset(40% 0 10% 0);
+            }
+            30% {
+                clip-path: inset(20% 0 30% 0);
+            }
+            40% {
+                clip-path: inset(50% 0 10% 0);
+            }
+            50% {
+                clip-path: inset(30% 0 20% 0);
+            }
+            60% {
+                clip-path: inset(10% 0 40% 0);
+            }
+            70% {
+                clip-path: inset(20% 0 30% 0);
+            }
+            80% {
+                clip-path: inset(40% 0 10% 0);
+            }
+            90% {
+                clip-path: inset(10% 0 20% 0);
+            }
+            100% {
+                clip-path: inset(0 0 0 0);
+            }
+        }
+
+        /* Flickering effect */
+        @keyframes flicker {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Password field styling */
+        input[type="text"] {
+            background-color: black;
+            border: 2px solid lime;
+            border-radius: 20px;
+            color: white;
+            padding: 10px;
+            width: 250px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', Courier, monospace;
+            animation: glitch-text 1s infinite, flicker 0.5s infinite;
+        }
+
+        /* Pseudo-elements for additional glitch effect */
+        input[type="text"]::before,
+        input[type="text"]::after {
+            content: attr(placeholder);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            color: white;
+            background-color: black;
+            opacity: 0;
+            pointer-events: none;
+            animation: glitch-text 1s infinite;
+        }
+
+        input[type="text"]::before {
+            clip-path: inset(0 0 50% 0);
+            animation-delay: 0.1s;
+        }
+
+        input[type="text"]::after {
+            clip-path: inset(50% 0 0 0);
+            animation-delay: 0.2s;
+        }
+
         /* Loading animation container */
         #loading-animation {
             display: none;
