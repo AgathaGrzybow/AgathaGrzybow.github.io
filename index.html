@@ -13,7 +13,9 @@
             font-family: 'Courier New', Courier, monospace;
             color: white;
             overflow-x: hidden;
-            background: black; /* Start completely black */
+            background: linear-gradient(to bottom, black 0%, white 100%);
+            background-attachment: scroll; /* Background scrolls with the page */
+            background-size: 100% 500vh; /* Background height matches scrollable content */
         }
 
         /* Content container */
@@ -125,19 +127,13 @@
     </div>
 
     <script>
-        // JavaScript for scroll-based background transition
-        const body = document.body;
-        const content = document.querySelector('.content');
+        // JavaScript to handle the ASCII art visibility
         const asciiArt = document.getElementById('ascii-art');
 
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-            const maxScroll = content.offsetHeight - window.innerHeight;
+            const maxScroll = document.querySelector('.content').offsetHeight - window.innerHeight;
             const scrollPercentage = scrollY / maxScroll;
-
-            // Update background color based on scroll position
-            const whitePercentage = Math.min(100, scrollPercentage * 100);
-            body.style.backgroundColor = `hsl(0, 0%, ${whitePercentage}%)`;
 
             // Fade in the ASCII art as you approach the bottom
             if (scrollY >= maxScroll) {
@@ -153,7 +149,7 @@
 
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-            const maxScroll = content.offsetHeight - window.innerHeight;
+            const maxScroll = document.querySelector('.content').offsetHeight - window.innerHeight;
             const scrollPercentage = scrollY / maxScroll;
 
             // Adjust opacity of password field and checkmark
