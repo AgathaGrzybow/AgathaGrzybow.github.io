@@ -195,12 +195,13 @@
         }
         // Combined function to check password
         async function checkPassword() {
-            const password = passwordField.value.trim();
+            const password = passwordField.value.trim().toUpperCase(); // Ensure uppercase
             const hashedInput = await hashPassword(password);
             let soundPlayed = false;
-            // Check for any keyword and play its respective sound
+
+            // Check for exact keyword matches and play their respective sounds
             for (let keyword of Object.keys(soundMap)) {
-                if (password.includes(keyword)) {
+                if (password === keyword) { // Use strict equality
                     if (keyword === "CORE") {
                         soundMap[keyword].play().catch(err => console.error("Audio could not be played:", err));
                         showCustomAlert(); // Optionally show alert for "CORE"
@@ -212,10 +213,12 @@
                     }
                 }
             }
+
             // Play incorrect sound if no keywords match and the answer is incorrect
             if (!soundPlayed && hashedInput !== correctPasswordHash) {
                 soundMap["INCORRECT"].play().catch(err => console.error("Audio could not be played:", err));
             }
+
             // Check if the hashed input matches the correct password
             if (hashedInput === correctPasswordHash) {
                 document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
