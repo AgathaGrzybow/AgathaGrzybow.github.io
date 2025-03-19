@@ -6,25 +6,18 @@
     <title>Glitch Site</title>
     <style>
         /* Global styles */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Courier New', Courier, monospace;
+        body {
+            background-color: black;
             color: white;
-            overflow-x: hidden;
-            background: black; /* Start completely black */
-        }
-
-        /* Content container */
-        .content {
-            min-height: 1000vh; /* Make the page scrollable for 10 seconds */
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: flex-start; /* Align content to the top */
-            text-align: center;
-            padding-top: 20px; /* Add some padding at the top */
+            position: relative;
         }
 
         /* Global glitch effect for text */
@@ -33,40 +26,50 @@
                 clip-path: inset(0 0 0 0);
             }
             10% {
-                clip-path: inset(0 0 95% 0); /* Glitch a small part of the text */
+                clip-path: inset(10% 0 20% 0);
             }
             20% {
-                clip-path: inset(0 0 0 0);
+                clip-path: inset(40% 0 10% 0);
             }
             30% {
-                clip-path: inset(0 0 90% 0); /* Glitch another small part */
+                clip-path: inset(20% 0 30% 0);
             }
             40% {
-                clip-path: inset(0 0 0 0);
+                clip-path: inset(50% 0 10% 0);
             }
             50% {
-                clip-path: inset(0 0 85% 0); /* Glitch another small part */
+                clip-path: inset(30% 0 20% 0);
             }
             60% {
-                clip-path: inset(0 0 0 0);
+                clip-path: inset(10% 0 40% 0);
             }
             70% {
-                clip-path: inset(0 0 80% 0); /* Glitch another small part */
+                clip-path: inset(20% 0 30% 0);
             }
             80% {
-                clip-path: inset(0 0 0 0);
+                clip-path: inset(40% 0 10% 0);
             }
             90% {
-                clip-path: inset(0 0 75% 0); /* Glitch another small part */
+                clip-path: inset(10% 0 20% 0);
             }
             100% {
                 clip-path: inset(0 0 0 0);
             }
         }
 
-        /* Apply glitch effects to text elements */
-        h1, .sub-text, input[type="text"], #checkmark {
-            animation: glitch-text 2s infinite; /* Slower glitch effect */
+        /* Global flickering effect */
+        @keyframes flicker {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Apply glitch effects to all text elements */
+        body * {
+            animation: glitch-text 1s infinite, flicker 0.5s infinite;
         }
 
         /* Specific styles for elements */
@@ -89,13 +92,14 @@
         }
 
         input[type="text"] {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: black;
             border: 2px solid lime;
             border-radius: 20px;
             color: white;
             padding: 10px;
             width: 250px;
-            margin: 20px;
+            position: relative;
+            z-index: 1;
             font-family: 'Courier New', Courier, monospace;
         }
 
@@ -171,96 +175,31 @@
                 opacity: 0; /* Fade out during fall */
             }
         }
-
-        /* ASCII art container */
-        #ascii-art {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white; /* ASCII art in white */
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            white-space: pre; /* Preserve spaces and line breaks */
-            opacity: 0; /* Start invisible */
-            transition: opacity 0.5s ease;
-            text-align: center; /* Center the ASCII art */
-        }
     </style>
 </head>
 <body>
     <div id="matrix"></div> <!-- Matrix rain container -->
-    <div class="content">
-        <h1>KEEP SMILING.</h1>
-        <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
-        <div>
-            <input type="text" id="password" placeholder="Enter password">
-            <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark">
-        </div>
-        <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
-        <div id="loading-animation">[ ] Loading...</div>
+    <h1>KEEP SMILING.</h1>
+    <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
+    <div>
+        <input type="text" id="password" placeholder="Enter password">
+        <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark">
     </div>
-
-    <!-- ASCII art of a man sitting on a chair -->
-    <div id="ascii-art">
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:*########******+-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=%%%%%%%%%%%%%%%%=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%%%%%%%%%%%%%%%%=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*+%%%%%%%%%%%%%%%%:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=-::::::::::::::::::::::::+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+:+::::::::::::::::*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*%%%%:::::::::-%%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%:::::::::::::%%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%:::::::::::::-%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%:::::::::::::-%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%:::::::::::::*%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%::::::::::::-%%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#%::::::::::::%%%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#%:::::::::::%%%%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=+:::::::::::::*%-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-:::::::::--=::::::::-:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**%%:::::%%%%%%=:::::-%%:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+#%-::::%%%%%%%%%*::::=%:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*#%:::=%%%%%%%%%%%%:::=%:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=#%:::#%%%%%%%%%%%%:::+%:===--------------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-%%%%%%%%%%%%%%%%%%=#%:::#%%%%%%%%%%%%+::=%:%%%%%%%%%%%%%%%%%%%%%%%%:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+-%%%%%%%%%%%%%%%%%%%+*%#::#%%%%%%%%%%%%%::=%:%%%%%%%%%%%%%%%%%%%%%%%%%%:*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:%%%%%%%%%%%%%%%%%%%%%%%%%::%%%%%%%%%%%%%+::#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%*:::::::::#%%%%%%%%%%%%%%%%%%%%%%%%%%=:%%%%%%%%%%%%%%:=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:*%%%%%%%%%*:#%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%--%%%%%%%*-%%%%%%%%%%%%%%%%%%%%%%%%%%%%#+%%%%%%%%%%%%%%=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:*%%%%%%%%%%:*%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%:-%%%%%%%%=:=========================================================================+++++++++++:%%%%%%%%%%%:+%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%:#%%%%%%%%%%-*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-%%%%%%%%%%%%%=:%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%#:#%%%%%%%%%%%%-*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-%%%%%%%%%%%%%%%=:%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%=:#%%%%%%%%%%%%%%-*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-%%%%%%%%%%%%%%%%%*:%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%-:%%%%%%%%%%%%%%%%%=+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-%%%%%%%%%%%%%%%%%%%%:+%%%%%%%%%%
-        %%%%%%%%%%%%%--%%%%%%%%%%%%%%%%%%%=+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-%%%%%%%%%%%%%%%%%%%%%#:+%%%%%%%%
-        %%%%%%%%%%%:+%%%%%%%%%%%%%%%%%%%%%*:::::::::::::::::::::::::::::::::::::::::::*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:=%%%%%%
-        %%%%%%%%%*:=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%--%%%%
-        %%%%%%%+:*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++++++++++++++=::#%
-        %%%%%*:-=+++++++++++++++::::::::::::::::::::::::::::::::::::::-------------------------====------*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:%
-        %%%%%+:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:%
-        %%%%%+:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:%
-        %%%%%+:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%:%
-    </div>
-
+    <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
+    <div id="loading-animation">[ ] Loading...</div>
     <script>
         // JavaScript for random shifts
         function applyGlitchEffect() {
-            const elements = document.querySelectorAll('h1, .sub-text, input[type="text"], #checkmark');
+            const elements = document.querySelectorAll('body *');
             elements.forEach(el => {
-                const randomX = (Math.random() - 0.5) * 2; // Smaller horizontal shift
-                const randomY = (Math.random() - 0.5) * 2; // Smaller vertical shift
+                const randomX = (Math.random() - 0.5) * 10; // Random horizontal shift
+                const randomY = (Math.random() - 0.5) * 10; // Random vertical shift
                 el.style.transform = `translate(${randomX}px, ${randomY}px)`;
             });
         }
 
         // Apply glitch effect at random intervals
-        const glitchInterval = setInterval(applyGlitchEffect, 200); // Faster glitch effect
+        setInterval(applyGlitchEffect, 200);
 
         // Matrix rain effect
         const matrixContainer = document.getElementById('matrix');
@@ -280,67 +219,6 @@
 
         // Start the matrix rain effect when the page loads
         startMatrixRain();
-
-        // JavaScript to handle the ASCII art visibility
-        const asciiArt = document.getElementById('ascii-art');
-
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const maxScroll = document.querySelector('.content').offsetHeight - window.innerHeight;
-            const scrollPercentage = scrollY / maxScroll;
-
-            // Fade in the ASCII art as you approach the bottom
-            if (scrollY >= maxScroll) {
-                asciiArt.style.opacity = 1;
-            } else {
-                asciiArt.style.opacity = scrollPercentage;
-            }
-        });
-
-        // Ensure the password field and other elements remain visible
-        const passwordField = document.getElementById('password');
-        const checkmark = document.getElementById('checkmark');
-
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const maxScroll = document.querySelector('.content').offsetHeight - window.innerHeight;
-            const scrollPercentage = scrollY / maxScroll;
-
-            // Adjust opacity of password field and checkmark
-            passwordField.style.opacity = 1 - scrollPercentage;
-            checkmark.style.opacity = 1 - scrollPercentage;
-        });
-
-        // Remove glitch effect on correct password
-        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be"; // Example hash
-        const checkmarkButton = document.getElementById('checkmark');
-
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        checkmarkButton.addEventListener('click', async () => {
-            const password = passwordField.value.trim();
-            const hashedInput = await hashPassword(password);
-
-            if (hashedInput === correctPasswordHash) {
-                // Remove glitch effect
-                clearInterval(glitchInterval);
-                document.querySelectorAll('h1, .sub-text, input[type="text"], #checkmark').forEach(el => {
-                    el.style.animation = 'none';
-                });
-            } else {
-                // Show custom alert for incorrect password
-                const customAlert = document.getElementById('custom-alert');
-                customAlert.style.top = '20px';
-                setTimeout(() => {
-                    customAlert.style.top = '-100px';
-                }, 3000);
-            }
-        });
     </script>
 </body>
 </html>
