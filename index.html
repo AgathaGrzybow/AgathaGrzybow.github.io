@@ -38,6 +38,46 @@
         .small {
             font-size: 14px;
         }
+        /* Glitch effect for the password input */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+                opacity: 1;
+            }
+            25% {
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(2px, -2px);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+        }
+        @keyframes glitch-color {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+            25% {
+                filter: hue-rotate(90deg);
+            }
+            50% {
+                filter: hue-rotate(180deg);
+            }
+            75% {
+                filter: hue-rotate(270deg);
+            }
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
         input[type="text"] {
             background-color: black;
             border: 2px solid lime;
@@ -47,6 +87,7 @@
             width: 250px;
             position: relative;
             z-index: 1;
+            animation: glitch 0.5s infinite, glitch-color 2s infinite;
         }
         #checkmark {
             cursor: pointer;
