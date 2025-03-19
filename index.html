@@ -38,44 +38,52 @@
         .small {
             font-size: 14px;
         }
-        /* Glitch effect for the password input */
-        @keyframes glitch {
+        /* Corrupted text effect */
+        @keyframes glitch-text {
             0% {
-                transform: translate(0);
-                opacity: 1;
+                clip-path: inset(0 0 0 0);
             }
-            25% {
-                transform: translate(-2px, 2px);
-                opacity: 0.8;
+            10% {
+                clip-path: inset(10% 0 20% 0);
+            }
+            20% {
+                clip-path: inset(40% 0 10% 0);
+            }
+            30% {
+                clip-path: inset(20% 0 30% 0);
+            }
+            40% {
+                clip-path: inset(50% 0 10% 0);
             }
             50% {
-                transform: translate(2px, -2px);
-                opacity: 0.6;
+                clip-path: inset(30% 0 20% 0);
             }
-            75% {
-                transform: translate(-2px, 2px);
-                opacity: 0.8;
+            60% {
+                clip-path: inset(10% 0 40% 0);
+            }
+            70% {
+                clip-path: inset(20% 0 30% 0);
+            }
+            80% {
+                clip-path: inset(40% 0 10% 0);
+            }
+            90% {
+                clip-path: inset(10% 0 20% 0);
             }
             100% {
-                transform: translate(0);
-                opacity: 1;
+                clip-path: inset(0 0 0 0);
             }
         }
-        @keyframes glitch-color {
+        /* Corrupted border effect */
+        @keyframes glitch-border {
             0% {
-                filter: hue-rotate(0deg);
-            }
-            25% {
-                filter: hue-rotate(90deg);
+                border-color: lime;
             }
             50% {
-                filter: hue-rotate(180deg);
-            }
-            75% {
-                filter: hue-rotate(270deg);
+                border-color: red;
             }
             100% {
-                filter: hue-rotate(360deg);
+                border-color: lime;
             }
         }
         input[type="text"] {
@@ -87,7 +95,33 @@
             width: 250px;
             position: relative;
             z-index: 1;
-            animation: glitch 0.5s infinite, glitch-color 2s infinite;
+            font-family: 'Courier New', Courier, monospace;
+            animation: glitch-text 1s infinite, glitch-border 0.5s infinite;
+        }
+        /* Pseudo-elements for additional glitch effect */
+        input[type="text"]::before,
+        input[type="text"]::after {
+            content: attr(placeholder);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            color: white;
+            background-color: black;
+            opacity: 0;
+            pointer-events: none;
+            animation: glitch-text 1s infinite;
+        }
+        input[type="text"]::before {
+            clip-path: inset(0 0 50% 0);
+            animation-delay: 0.1s;
+        }
+        input[type="text"]::after {
+            clip-path: inset(50% 0 0 0);
+            animation-delay: 0.2s;
         }
         #checkmark {
             cursor: pointer;
