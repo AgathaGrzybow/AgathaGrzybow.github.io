@@ -3,126 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GREETINGS.</title>
+    <title>Scroll into White</title>
     <style>
-        body {
-            background-color: black;
-            color: white;
+        /* Global styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
             font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-            overflow: hidden;
-            height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Gradient background */
+        body {
+            background: linear-gradient(to bottom, black 0%, white 100%);
+            background-attachment: fixed;
+            transition: background 0.5s ease;
+        }
+
+        /* Content container */
+        .content {
+            min-height: 200vh; /* Make the page scrollable */
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            position: relative;
+            justify-content: center;
+            text-align: center;
         }
-        h1 {
-            font-size: 48px;
-            opacity: 1;
-            animation: flicker 2s infinite;
-            position: relative;
-            z-index: 1;
-        }
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .sub-text {
-            font-size: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        .small {
-            font-size: 14px;
-        }
-        /* Corrupted text effect */
-        @keyframes glitch-text {
-            0% {
-                clip-path: inset(0 0 0 0);
-            }
-            10% {
-                clip-path: inset(10% 0 20% 0);
-            }
-            20% {
-                clip-path: inset(40% 0 10% 0);
-            }
-            30% {
-                clip-path: inset(20% 0 30% 0);
-            }
-            40% {
-                clip-path: inset(50% 0 10% 0);
-            }
-            50% {
-                clip-path: inset(30% 0 20% 0);
-            }
-            60% {
-                clip-path: inset(10% 0 40% 0);
-            }
-            70% {
-                clip-path: inset(20% 0 30% 0);
-            }
-            80% {
-                clip-path: inset(40% 0 10% 0);
-            }
-            90% {
-                clip-path: inset(10% 0 20% 0);
-            }
-            100% {
-                clip-path: inset(0 0 0 0);
-            }
-        }
-        /* Corrupted border effect */
-        @keyframes glitch-border {
-            0% {
-                border-color: lime;
-            }
-            50% {
-                border-color: red;
-            }
-            100% {
-                border-color: lime;
-            }
-        }
+
+        /* Password field and other elements */
         input[type="text"] {
-            background-color: black;
+            background-color: rgba(0, 0, 0, 0.5);
             border: 2px solid lime;
             border-radius: 20px;
             color: white;
             padding: 10px;
             width: 250px;
-            position: relative;
-            z-index: 1;
+            margin: 20px;
             font-family: 'Courier New', Courier, monospace;
-            animation: glitch-text 1s infinite, glitch-border 0.5s infinite;
         }
-        /* Pseudo-elements for additional glitch effect */
-        input[type="text"]::before,
-        input[type="text"]::after {
-            content: attr(placeholder);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 10px;
-            border-radius: 20px;
-            color: white;
-            background-color: black;
-            opacity: 0;
-            pointer-events: none;
-            animation: glitch-text 1s infinite;
-        }
-        input[type="text"]::before {
-            clip-path: inset(0 0 50% 0);
-            animation-delay: 0.1s;
-        }
-        input[type="text"]::after {
-            clip-path: inset(50% 0 0 0);
-            animation-delay: 0.2s;
-        }
+
         #checkmark {
             cursor: pointer;
             font-size: 24px;
@@ -131,191 +52,74 @@
             margin-top: 24px;
             margin-left: 4px;
             display: inline-block;
-            position: relative;
-            z-index: 1;
         }
-        #custom-alert {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 128, 0, 0.9);
-            transition: top 0.5s;
-            z-index: 1;
-        }
-        #ok-button {
-            background-color: black;
-            color: lime;
-            border: none;
-            border-radius: 3px;
-        }
-        #loading-animation {
-            display: none;
-            white-space: pre;
-            font-size: 24px;
-            margin-top: 20px;
-        }
-        .fade-out {
-            animation: fade 1s forwards;
-        }
-        @keyframes fade {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        /* Matrix Rain */
-        #matrix {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
+
+        /* Image at the end */
+        #end-image {
+            width: 100%;
             height: 100vh;
-            overflow: hidden;
-            z-index: 0;
-        }
-        .matrix-character {
-            color: lime;
-            font-size: 20px;
-            font-family: monospace;
-            white-space: nowrap;
-            position: absolute;
-            bottom: 100%;
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            to { 
-                transform: translateY(100vh); 
-                opacity: 0; /* Fade out during fall */
-            }
+            background-image: url('man-sitting.jpg'); /* Replace with your image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
-    <div id="matrix"></div> <!-- Matrix rain container -->
-    <h1>KEEP SMILING.</h1>
-    <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
-    <div>
-        <input type="text" id="password" placeholder="Enter password">
-        <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark">
+    <div class="content">
+        <h1>KEEP SMILING.</h1>
+        <div class="sub-text">WHAT'S MY NAME? <span class="small">(ONLY IN UPPERCASE)</span></div>
+        <div>
+            <input type="text" id="password" placeholder="Enter password">
+            <img id="checkmark" src="https://file.garden/ZzdYp8wGIQT2aIcp/kuczek.png" alt="Checkmark">
+        </div>
+        <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
+        <div id="loading-animation">[ ] Loading...</div>
     </div>
-    <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
-    <div id="loading-animation">[ ] Loading...</div>
+    <div id="end-image">
+        <!-- Image of a man sitting on a chair -->
+    </div>
+
     <script>
-        const correctPasswordHash = "2b40b494dec3f3354e6b062eee145875fc0d2994341691f70179735e1fe1a8be";
-        const loadingAnimation = document.getElementById('loading-animation');
-        const passwordField = document.getElementById('password');
-        const checkmark = document.getElementById('checkmark');
-        const customAlert = document.getElementById('custom-alert');
-        const okButton = document.getElementById('ok-button');
-        const matrixContainer = document.getElementById('matrix');
-        // Define sounds for each keyword and incorrect answer
-        const soundMap = {
-            "LYNX": new Audio('meow-1.mp3'),
-            "ECHEL": new Audio('hello-this-is-kitty.mp3'),
-            "DUXERZ": new Audio('duxa.mp3'),
-            "SHARKYLEO": new Audio('ltg-faggots.mp3'),
-            "AGATHA": new Audio('ding-sound-effect_2.mp3'),
-            "666": new Audio('666-jumpscare-sound.mp3'),
-            "INCORRECT": new Audio('wrong-lie-incorrect-buzzer.mp3'), // Incorrect answer sound
-            "CORE": new Audio('Oh my gah.mp3') // New sound for CORE
-        };
-        // This function will create a Matrix character
-        function createMatrixCharacter() {
-            const charElem = document.createElement('div');
-            charElem.className = 'matrix-character';
-            charElem.innerText = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.floor(Math.random() * 36)];
-            charElem.style.left = Math.random() * 100 + 'vw';
-            charElem.style.animationDuration = Math.random() * 3 + 3 + 's';
-            matrixContainer.appendChild(charElem);
-            charElem.addEventListener('animationend', () => charElem.remove());
-        }
-        function startMatrixRain() {
-            setInterval(createMatrixCharacter, 300);
-        }
-        // Function for hashing the password
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-        // Function to show custom alert
-        function showCustomAlert() {
-            customAlert.style.display = 'block';
-            customAlert.style.top = '20px'; 
-            setTimeout(() => {
-                customAlert.style.top = '-100px'; 
-            }, 3000);
-        }
-        // Function to show loading animation
-        function showLoadingAnimation() {
-            loadingAnimation.style.display = 'block';
-            loadingAnimation.textContent = "[ ] Loading...";
-            loadingAnimation.style.color = 'lime';
-            let progress = 0;
-            const interval = setInterval(() => {
-                if (progress < 10) {
-                    progress++;
-                    loadingAnimation.textContent = "[ " + '='.repeat(progress) + ' '.repeat(10 - progress) + ' ] Loading' + ".".repeat(progress % 3);
-                } else {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        // Fade out all UI components
-                        document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
-                        setTimeout(() => {
-                            window.location.href = 'main.html'; // Redirect after loading
-                        }, 1000);
-                    }, 1000);
-                }
-            }, 500);
-        }
-        // Combined function to check password
-        async function checkPassword() {
-            const password = passwordField.value.trim().toUpperCase(); // Ensure uppercase
-            const hashedInput = await hashPassword(password);
-            let soundPlayed = false;
+        // JavaScript for scroll-based background transition
+        const body = document.body;
+        const content = document.querySelector('.content');
+        const endImage = document.getElementById('end-image');
 
-            // Check for exact keyword matches and play their respective sounds
-            for (let keyword of Object.keys(soundMap)) {
-                if (password === keyword) { // Use strict equality
-                    if (keyword === "CORE") {
-                        soundMap[keyword].play().catch(err => console.error("Audio could not be played:", err));
-                        showCustomAlert(); // Optionally show alert for "CORE"
-                        return; // Prevent further processing
-                    } else {
-                        soundMap[keyword].play().catch(err => console.error("Audio could not be played:", err));
-                        soundPlayed = true;
-                        break; // Stop checking after the first keyword match
-                    }
-                }
-            }
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const maxScroll = content.offsetHeight - window.innerHeight;
+            const scrollPercentage = scrollY / maxScroll;
 
-            // Play incorrect sound if no keywords match and the answer is incorrect
-            if (!soundPlayed && hashedInput !== correctPasswordHash) {
-                soundMap["INCORRECT"].play().catch(err => console.error("Audio could not be played:", err));
-            }
+            // Update background gradient based on scroll position
+            const blackPercentage = Math.max(0, 100 - scrollPercentage * 100);
+            body.style.background = `linear-gradient(to bottom, black ${blackPercentage}%, white ${blackPercentage}%)`;
 
-            // Check if the hashed input matches the correct password
-            if (hashedInput === correctPasswordHash) {
-                document.body.querySelectorAll('h1, .sub-text, #password, #checkmark, #custom-alert').forEach(el => el.classList.add('fade-out'));
-                setTimeout(showLoadingAnimation, 1000); // Delay to allow fade out
+            // Fade in the end image as you approach the bottom
+            if (scrollY >= maxScroll) {
+                endImage.style.opacity = 1;
             } else {
-                showCustomAlert(); // Show custom alert for incorrect password
-            }
-        }
-        // Checkmark click event
-        checkmark.onclick = checkPassword;
-        // Event listener for pressing Enter in the password field
-        passwordField.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                checkPassword(); // Trigger the password check
+                endImage.style.opacity = scrollPercentage;
             }
         });
-        okButton.onclick = function() {
-            customAlert.style.display = 'none'; 
-        };
-        
-        // Start the matrix rain effect when the page loads
-        startMatrixRain();
+
+        // Ensure the password field and other elements remain visible
+        const passwordField = document.getElementById('password');
+        const checkmark = document.getElementById('checkmark');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const maxScroll = content.offsetHeight - window.innerHeight;
+            const scrollPercentage = scrollY / maxScroll;
+
+            // Adjust opacity of password field and checkmark
+            passwordField.style.opacity = 1 - scrollPercentage;
+            checkmark.style.opacity = 1 - scrollPercentage;
+        });
     </script>
 </body>
 </html>
