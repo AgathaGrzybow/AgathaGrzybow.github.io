@@ -6,132 +6,22 @@
     <title>Glitch Site</title>
     <style>
         /* Global styles */
-        body {
-            background-color: black;
-            color: white;
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
             font-family: 'Courier New', Courier, monospace;
-            text-align: center;
+            color: white;
             overflow: hidden;
-            height: 100vh;
+            background: black; /* Start completely black */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
+            text-align: center;
         }
 
-        /* Global glitch effect for text */
-        @keyframes glitch-text {
-            0% {
-                clip-path: inset(0 0 0 0);
-            }
-            10% {
-                clip-path: inset(10% 0 20% 0);
-            }
-            20% {
-                clip-path: inset(40% 0 10% 0);
-            }
-            30% {
-                clip-path: inset(20% 0 30% 0);
-            }
-            40% {
-                clip-path: inset(50% 0 10% 0);
-            }
-            50% {
-                clip-path: inset(30% 0 20% 0);
-            }
-            60% {
-                clip-path: inset(10% 0 40% 0);
-            }
-            70% {
-                clip-path: inset(20% 0 30% 0);
-            }
-            80% {
-                clip-path: inset(40% 0 10% 0);
-            }
-            90% {
-                clip-path: inset(10% 0 20% 0);
-            }
-            100% {
-                clip-path: inset(0 0 0 0);
-            }
-        }
-
-        /* Global flickering effect */
-        @keyframes flicker {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        /* Apply glitch effects to all text elements */
-        body * {
-            animation: glitch-text 1s infinite, flicker 0.5s infinite;
-        }
-
-        /* Specific styles for elements */
-        h1 {
-            font-size: 48px;
-            opacity: 1;
-            position: relative;
-            z-index: 1;
-        }
-
-        .sub-text {
-            font-size: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .small {
-            font-size: 14px;
-        }
-
-        input[type="text"] {
-            background-color: black;
-            border: 2px solid lime;
-            border-radius: 20px;
-            color: white;
-            padding: 10px;
-            width: 250px;
-            position: relative;
-            z-index: 1;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        #checkmark {
-            cursor: pointer;
-            font-size: 24px;
-            width: 30px;
-            height: auto;
-            margin-top: 24px;
-            margin-left: 4px;
-            display: inline-block;
-            position: relative;
-            z-index: 1;
-        }
-
-        #custom-alert {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 128, 0, 0.9);
-            transition: top 0.5s;
-            z-index: 1;
-        }
-
-        #ok-button {
-            background-color: black;
-            color: lime;
-            border: none;
-            border-radius: 3px;
-        }
-
+        /* Loading animation container */
         #loading-animation {
             display: none;
             white-space: pre;
@@ -139,13 +29,14 @@
             margin-top: 20px;
         }
 
-        .fade-out {
-            animation: fade 1s forwards;
-        }
-
-        @keyframes fade {
-            from { opacity: 1; }
-            to { opacity: 0; }
+        /* Snake game container */
+        #snake-game {
+            display: none;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            white-space: pre;
+            text-align: center;
+            margin-top: 20px;
         }
 
         /* Matrix Rain */
@@ -187,20 +78,9 @@
     </div>
     <div id="custom-alert">TRY AGAIN.<button id="ok-button">OK</button></div>
     <div id="loading-animation">[ ] Loading...</div>
+    <div id="snake-game"></div>
+
     <script>
-        // JavaScript for random shifts
-        function applyGlitchEffect() {
-            const elements = document.querySelectorAll('body *');
-            elements.forEach(el => {
-                const randomX = (Math.random() - 0.5) * 10; // Random horizontal shift
-                const randomY = (Math.random() - 0.5) * 10; // Random vertical shift
-                el.style.transform = `translate(${randomX}px, ${randomY}px)`;
-            });
-        }
-
-        // Apply glitch effect at random intervals
-        setInterval(applyGlitchEffect, 200);
-
         // Matrix rain effect
         const matrixContainer = document.getElementById('matrix');
         function createMatrixCharacter() {
@@ -219,6 +99,110 @@
 
         // Start the matrix rain effect when the page loads
         startMatrixRain();
+
+        // Snake minigame
+        const snakeGame = document.getElementById('snake-game');
+        const loadingAnimation = document.getElementById('loading-animation');
+
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 5, y: 5 };
+        let direction = { x: 0, y: 0 };
+        let score = 0;
+
+        function drawSnake() {
+            let board = '';
+            for (let y = 0; y < 20; y++) {
+                for (let x = 0; x < 20; x++) {
+                    if (snake.some(segment => segment.x === x && segment.y === y)) {
+                        board += 'O'; // Snake body
+                    } else if (food.x === x && food.y === y) {
+                        board += 'X'; // Food
+                    } else {
+                        board += '.'; // Empty space
+                    }
+                }
+                board += '\n';
+            }
+            snakeGame.textContent = board + `Score: ${score}`;
+        }
+
+        function updateSnake() {
+            const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+            // Check for collision with walls or itself
+            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                resetGame();
+                return;
+            }
+
+            snake.unshift(head);
+
+            // Check if snake eats food
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                placeFood();
+            } else {
+                snake.pop();
+            }
+        }
+
+        function placeFood() {
+            food = {
+                x: Math.floor(Math.random() * 20),
+                y: Math.floor(Math.random() * 20)
+            };
+        }
+
+        function resetGame() {
+            snake = [{ x: 10, y: 10 }];
+            direction = { x: 0, y: 0 };
+            score = 0;
+            placeFood();
+        }
+
+        function gameLoop() {
+            updateSnake();
+            drawSnake();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (direction.y === 0) direction = { x: 0, y: -1 };
+                    break;
+                case 'ArrowDown':
+                    if (direction.y === 0) direction = { x: 0, y: 1 };
+                    break;
+                case 'ArrowLeft':
+                    if (direction.x === 0) direction = { x: -1, y: 0 };
+                    break;
+                case 'ArrowRight':
+                    if (direction.x === 0) direction = { x: 1, y: 0 };
+                    break;
+            }
+        });
+
+        // Start the snake game loop
+        const snakeInterval = setInterval(gameLoop, 200);
+
+        // Show the snake game during loading
+        let progress = 0;
+        const loadingInterval = setInterval(() => {
+            if (progress < 20) {
+                progress++;
+                loadingAnimation.textContent = "[ " + '='.repeat(progress) + ' '.repeat(20 - progress) + ' ] Loading" + ".".repeat(progress % 3);
+            } else {
+                clearInterval(loadingInterval);
+                clearInterval(snakeInterval); // Stop the snake game
+                loadingAnimation.style.display = 'none';
+                snakeGame.style.display = 'none';
+                window.location.href = 'main.html'; // Redirect to main.html
+            }
+        }, 500);
+
+        // Show the snake game during loading
+        loadingAnimation.style.display = 'block';
+        snakeGame.style.display = 'block';
     </script>
 </body>
 </html>
